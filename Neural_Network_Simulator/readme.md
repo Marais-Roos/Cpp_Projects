@@ -106,6 +106,5 @@ The class represents a single neuron stored in the hidden layer, hidden neurons 
 - ```activateReLU()``` applies the ReLU function to the ```value``` stored in this neuron, and sets the ```value``` to the result.
  - Defined as $f(value) = max(0, value)$
 - ```activateSigmoid()``` applies the ```Sigmoid``` function to the ```value``` stored in this neuron, and sets the ```value``` to the result.
-  $$
-  sigmoid(value) = 1 \over 1 + e^-value
-  $$
+- 
+  $sigmoid(value) = 1 \over 1 + e^-value$
