@@ -65,3 +65,47 @@ This project is significantly simplified compared to real-life implementations. 
 - ```clearLayer()```
  - Sets each element of the ```inputs``` array to zero.
  - If the inputs array is NULL, then do nothing.
+
+### Hidden Neuron
+
+The class represents a single neuron stored in the hidden layer, hidden neurons are the only neurons that can get activated. 
+
+```
+- value: double
+- numWeights: int
+- weights: double*
+---
++ HiddenNeuron(numWeights: int, weights: double*)
++ ~HiddenNeuron()
++ getValue(): double
++ setValue(value: double): void
++ forward(prevLayer: HiddenLayer*) : void
++ forward(prevLayer: InputLayer*) : void
++ activateReLU() : void
++ activateSigmoid() : void
+```
+
+#### Member Variables
+
+- ```value``` represents the current value that this neuron holds
+- ```numWeights``` holds the size of the weights array. The value corresponds to the number of neurons in the previous.
+- ```weights``` is a dynamic ```double``` array containing the values of the weights connecting to this neurons from the previous layer.
+
+#### Member Functions
+
+- ```HiddenNeuron(int numWeights, double* weights)``` is a constructor that accepts the  ```numWeights``` and ```weights``` array and sets the corresponding member variables, without a deep copy. ```value``` is initialized to zero.
+- ```~HiddenNeuron()``` the destructor deallocates the ```weights``` array.
+- ```getValue()``` returns the value of this neuron.
+- ```setValue(double value)``` sets the ```value``` of this neuron to the value of the argument.
+- ```forward(HiddenLayer* prevLayer)``` responsible for calculating the new ```value``` of this neuron. 
+ - Multiplies the value of each neuron in the previous hidden layer by the corresponding weight in the ```weights``` array of this neuron. 
+  - Each product is then summed up to produce the new value.
+- ```forward(InputLayer* prevLayer)``` is an overload of the ```forward``` function which performs a forward operation given an ```InputLayer``` instead of a ```HiddenLayer```.
+ - It is only necessary when the previous layer is the ```InputLayer```, this implies that the neuron is in the first ```HiddenLayer``` after the ```InputLayer```.
+ - The calculations are same, except that the ```inputs``` array is used instead of the neurons weights.
+- ```activateReLU()``` applies the ReLU function to the ```value``` stored in this neuron, and sets the ```value``` to the result.
+ - Defined as $f(value) = max(0, value)$
+- ```activateSigmoid()``` applies the ```Sigmoid``` function to the ```value``` stored in this neuron, and sets the ```value``` to the result.
+  $$
+  sigmoid(value) = 1 \over 1 + e^-value
+  $$
