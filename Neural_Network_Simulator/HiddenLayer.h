@@ -3,8 +3,8 @@
 
 #include <string>
 #include "InputLayer.h"
-//#include "HiddenNeuron.h"
-class HiddenNeuron;
+#include "HiddenNeuron.h"
+//class HiddenNeuron;
 
 class HiddenLayer 
 {

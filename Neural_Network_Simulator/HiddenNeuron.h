@@ -2,8 +2,8 @@
 #define HIDDEN_NEURON_H
 
 #include "InputLayer.h"
-#include "HiddenLayer.h"
-//class HiddenLayer;
+//#include "HiddenLayer.h"
+class HiddenLayer;
 
 #include <math.h>
 

@@ -6,6 +6,7 @@
 #include "InputLayer.h"
 #include "HiddenNeuron.h"
 #include "HiddenLayer.h"
+#include "OutputLayer.h"
 
 using namespace std;
 
@@ -31,7 +32,6 @@ void hiddenNeuronForwardInputLayer();
 void hiddenNeuronActivateReLU();
 void hiddenNeuronActivateSigmoid();
 
-
 void hiddenLayerConstructor();
 void hiddenLayerDestructor();
 void hiddenLayerSetNeurons();
@@ -42,6 +42,14 @@ void hiddenLayerForwardHiddenLayer();
 void hiddenLayerForwardInputLayer();
 void hiddenLayerPrint();
 void hiddenLayerClear();
+
+void outputLayerConstructor();
+void outputLayerDestructor();
+void outputLayerSetOutputValue();
+void outputLayerSetAndGetOutputValue();
+void outputLayerForwardLastHiddenLayer();
+void outputLayerPrint();
+void outputLayerClear();
 //*********************************************************
 
 int main()
@@ -81,6 +89,16 @@ int main()
     hiddenLayerPrint();
     hiddenLayerClear();
     
+    //Test Output Layer
+    cout << "Testing Output Layer" << endl;
+    outputLayerConstructor();
+    outputLayerDestructor();
+    outputLayerSetOutputValue();
+    outputLayerSetAndGetOutputValue();
+    outputLayerForwardLastHiddenLayer();
+    outputLayerPrint();
+    outputLayerClear();
+
     return 0;
 }
 
@@ -773,6 +791,141 @@ void hiddenLayerClear()
     delete [] neurons;
     delete [] weights;
     
+    cout << "Success!" << endl;
+}
+
+//*********************************************************
+
+void outputLayerConstructor()
+{
+    cout << "Testing Output Layer constructor" << endl;
+    int numWeights = 3;
+    double* weights = new double[numWeights];
+
+    OutputLayer* oL = new OutputLayer(numWeights, weights);
+
+    delete [] weights;
+    cout << "Success!" << endl;
+}
+
+void outputLayerDestructor()
+{
+    cout << "Testing Output Layer destructor" << endl;
+
+    int numWeights = 3;
+    double* weights = new double[numWeights];
+
+    OutputLayer* oL = new OutputLayer(numWeights, weights);
+
+    delete oL;
+
+    delete [] weights;
+    cout << "Success!" << endl;
+}
+
+void outputLayerSetOutputValue()
+{
+    cout << "Testing Output Layer setOutputValue()" << endl;
+
+    int numWeights = 3;
+    double* weights = new double[numWeights];
+
+    OutputLayer* oL = new OutputLayer(numWeights, weights);
+
+    oL->setOutputValue(3.14);
+
+    delete oL;
+
+    delete [] weights;
+    cout << "Success!" << endl;
+}
+
+void outputLayerSetAndGetOutputValue()
+{
+    cout << "Testing Output Layer setOutputValue() & getOutputValue()" << endl;
+
+    int numWeights = 3;
+    double* weights = new double[numWeights];
+
+    OutputLayer* oL = new OutputLayer(numWeights, weights);
+
+    oL->setOutputValue(3.14);
+
+    cout << "Output: " << oL->getOutputValue() << endl;
+
+    delete oL;
+
+    delete [] weights;
+
+    cout << "Success!" << endl;
+}
+
+void outputLayerForwardLastHiddenLayer()
+{
+    cout << "Testing Output Layer forward(HiddenLayer* lastHiddenLayer)" << endl;
+
+    int numWeights = 3;
+    double* weights = new double[numWeights];
+    weights[0] = 0.023;
+    weights[1] = 1.65;
+    weights[2] = 0.992;
+
+    int numNeurons = 3;
+    HiddenNeuron** neurons = new HiddenNeuron*[numNeurons];
+    neurons[0] = new HiddenNeuron(numWeights, weights);
+    neurons[1] = new HiddenNeuron(numWeights, weights);
+    neurons[2] = new HiddenNeuron(numWeights, weights);
+
+    HiddenLayer* hL = new HiddenLayer(numNeurons, neurons, "relu");
+
+    OutputLayer* oL = new OutputLayer(numWeights, weights);
+
+    oL->forward(hL);
+    cout << "output: " << oL->getOutputValue() << endl;
+
+    delete hL;
+    delete oL;
+    for (int i = 0; i < numNeurons; i++) 
+        delete neurons[i];
+    delete [] neurons;
+    delete [] weights;
+
+    cout << "Success!" << endl;
+}
+
+void outputLayerPrint()
+{
+    cout << "Testing Output Layer printLayer()" << endl;
+
+    int numWeights = 3;
+    double* weights = new double[numWeights];
+
+    OutputLayer* oL = new OutputLayer(numWeights, weights);
+
+    oL->printLayer();
+
+    delete oL;
+
+    delete [] weights;
+
+    cout << "Success!" << endl;
+}
+
+void outputLayerClear()
+{
+    cout << "Testing Output Layer clearLayer()" << endl;
+
+    int numWeights = 3;
+    double* weights = new double[numWeights];
+
+    OutputLayer* oL = new OutputLayer(numWeights, weights);
+
+    oL->clearLayer();
+
+    delete oL;
+
+    delete [] weights;
+
     cout << "Success!" << endl;
 }
 

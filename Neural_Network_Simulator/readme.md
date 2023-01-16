@@ -108,7 +108,6 @@ The class represents a single neuron stored in the hidden layer, hidden neurons 
 - ```activateSigmoid()``` applies the ```Sigmoid``` function to the ```value``` stored in this neuron, and sets the ```value``` to the result.
   $sigmoid(value) = {1 \over 1 + e^-value}$
 
-
 ### Hidden Layer
 
 A ```HiddenLayer``` class contains an array of ```HiddenNeuron``` objects. This class orchestrates the movement of values from the previous layer into this layer by calling the ```forward``` function for each of its neurons. A special case occurs for **first** hidden layer in the network because it receives input from an ```InputLayer``` instead of another ```HiddenLayer```. After values have moved forward into this layer, an activation function is invoked for each ```HiddenNeuron``` based on the ```activation``` member variable.
@@ -154,3 +153,40 @@ A ```HiddenLayer``` class contains an array of ```HiddenNeuron``` objects. This 
     - Activations apply the same way as the aforementioned ```forward(InputLayer* prevLayer)``.
 - ```printLayer()``` prints the string ```h:x:a``` where ```x``` is the ```numNeurons``` of this layer and ```a``` is the activation of this layer.
 - ```clearLayer()``` sets the value of each ```HiddenNeuron``` in the ```neurons``` array to zero.
+
+### OutputLayer
+
+The ```OutputLayer``` essentially represents the single output neuron. Therefore, there is one set of ```weights``` which attaches this layer to the last hidden layer. The single ```outputValue``` of this layer represents the output of the entire NN. For simplicity, the ```OutputLayer``` does not apply any activation functions.
+
+```
+- outputValue : double;
+- numWeights : int;
+- weights : double*;
+---
++ OutputLayer(numWeights : int, weights : double*)
++ ~OutputLayer()
++ getOutputValue() : double
++ setOutputValue() : void
++ forward(lastHiddenLayer : HiddenLayer*) : void
++ printLayer() : void
++ clearLayer() : void
+```
+
+#### Member Variables
+
+- ```outputValue``` represents the output value of the network
+- ```numWeights``` is the size of the ```weights``` array for this ```OutputLayer```.
+    - Since there is only one output value, only one array of weights is needed.
+- ```weights``` is a ```double``` array which contains the weights values betwwen the last hidden layer and the output layer.
+
+#### Member Functions
+
+- ```OutputLayer(int numWeights, double* weights)``` the received arguments are assigned to the corresponding member variables.
+    - No deep copy is performed for the ```weights``` array
+    - Initial ```outputValue``` is set to zero
+- ```~OutputLayer()``` deallocates the ```weights``` array
+- ```getOutputValue()``` returns the ```outputValue```
+- ```setOutputValue(double outputValue)``` sets the ```outputValue``` member variable
+- ```forward(HiddenLayer* lastHiddenLayer)``` performs a forward operation using the ```weights``` member variable and the last ```HiddenLayer``` which is passed as a parameter. The ```outputValue``` is set as the result of this operation.
+- ```printLayer()``` prints the string ```o:1``` as there is always only one output in this layer
+- ```clearLayer()``` sets the ```outputValue``` member variable to zero

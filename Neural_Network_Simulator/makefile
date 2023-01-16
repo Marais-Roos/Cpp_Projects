@@ -4,10 +4,10 @@ CC = g++
 CFLAGS = -Wall -g
 
 #Targets needed to bring the executable up to date
-main: HiddenLayer.o HiddenNeuron.o InputLayer.o  main.o
-	$(CC) $(CFLAGS) -o main HiddenLayer.o HiddenNeuron.o InputLayer.o main.o
+main: HiddenLayer.o HiddenNeuron.o InputLayer.o OutputLayer.o main.o
+	$(CC) $(CFLAGS) -o main HiddenLayer.o HiddenNeuron.o InputLayer.o OutputLayer.o main.o
 
-main.o: main.cpp InputLayer.h HiddenLayer.h HiddenNeuron.h
+main.o: main.cpp InputLayer.h HiddenLayer.h HiddenNeuron.h OutputLayer.h
 	$(CC) $(CFLAGS) -c main.cpp
 
 InputLayer.o: InputLayer.h
@@ -17,6 +17,9 @@ HiddenNeuron.o: HiddenNeuron.cpp HiddenNeuron.h HiddenLayer.h InputLayer.h
 
 HiddenLayer.o: HiddenLayer.cpp HiddenLayer.h HiddenNeuron.h
 	$(CC) $(CFLAGS) -c HiddenLayer.cpp
+
+OutputLayer.o: OutputLayer.cpp OutputLayer.h HiddenLayer.h
+	$(CC) $(CFLAGS) -c OutputLayer.cpp
 
 #Makefile commands
 run:
