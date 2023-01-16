@@ -70,7 +70,17 @@ int main()
 
     //Test Hidden Layer
     cout << "Testing Hidden Layer" << endl;
-
+    hiddenLayerConstructor();
+    hiddenLayerDestructor();
+    hiddenLayerSetNeurons();
+    hiddenLayerSetAndGetNeurons();
+    hiddenLayerSetNumNeurons();
+    hiddenLayerSetAndGetNumNeurons();
+    hiddenLayerForwardHiddenLayer();
+    hiddenLayerForwardInputLayer();
+    hiddenLayerPrint();
+    hiddenLayerClear();
+    
     return 0;
 }
 
@@ -424,52 +434,346 @@ void hiddenNeuronActivateSigmoid()
 
 void hiddenLayerConstructor()
 {
+    cout << "Testing Hidden Layer Constructor" << endl;
+    int numWeights = 3;
+    double* weights = new double[numWeights];
+    weights[0] = 0.023;
+    weights[1] = 1.65;
+    weights[2] = 0.992;
 
+    int numNeurons = 3;
+    HiddenNeuron** neurons = new HiddenNeuron*[numNeurons];
+    neurons[0] = new HiddenNeuron(numWeights, weights);
+    neurons[1] = new HiddenNeuron(numWeights, weights);
+    neurons[2] = new HiddenNeuron(numWeights, weights);
+
+    HiddenLayer* hL = new HiddenLayer(numNeurons, neurons, "relu");
+
+    for (int i = 0; i < numNeurons; i++) 
+        delete neurons[i];
+    delete [] neurons;
+    delete [] weights;
+
+    cout << "Success!" << endl;
 }
 
 void hiddenLayerDestructor()
 {
+    cout << "Testing Hidden Layer Destructor" << endl;
 
+    int numWeights = 3;
+    double* weights = new double[numWeights];
+    weights[0] = 0.023;
+    weights[1] = 1.65;
+    weights[2] = 0.992;
+
+    int numNeurons = 3;
+    HiddenNeuron** neurons = new HiddenNeuron*[numNeurons];
+    neurons[0] = new HiddenNeuron(numWeights, weights);
+    neurons[1] = new HiddenNeuron(numWeights, weights);
+    neurons[2] = new HiddenNeuron(numWeights, weights);
+
+    HiddenLayer* hL = new HiddenLayer(numNeurons, neurons, "relu");
+
+    delete hL;
+
+    for (int i = 0; i < numNeurons; i++) 
+        delete neurons[i];
+    delete [] neurons;
+    delete [] weights;
+
+    cout << "Success!" << endl;
 }
 
 void hiddenLayerSetNeurons()
 {
+    cout << "Testing Hidden Layer setNeurons" << endl;
 
+    int numWeights = 3;
+    double* weights = new double[numWeights];
+    weights[0] = 0.023;
+    weights[1] = 1.65;
+    weights[2] = 0.992;
+
+    int numNeurons = 3;
+    HiddenNeuron** neurons = new HiddenNeuron*[numNeurons];
+    neurons[0] = new HiddenNeuron(numWeights, weights);
+    neurons[1] = new HiddenNeuron(numWeights, weights);
+    neurons[2] = new HiddenNeuron(numWeights, weights);
+
+    HiddenLayer* hL = new HiddenLayer(numNeurons, neurons, "relu");
+
+    double* newWeights = new double[numWeights];
+    newWeights[0] = 2.3;
+    newWeights[1] = 16.5;
+    newWeights[2] = 9.92;
+
+    HiddenNeuron** newNeurons = new HiddenNeuron*[numNeurons];
+    newNeurons[0] = new HiddenNeuron(numWeights, newWeights);
+    newNeurons[1] = new HiddenNeuron(numWeights, newWeights);
+    newNeurons[2] = new HiddenNeuron(numWeights, newWeights);
+
+    hL->setNeurons(newNeurons);
+
+    delete hL;
+
+    for (int i = 0; i < numNeurons; i++) 
+        delete neurons[i];
+    delete [] neurons;
+    delete [] weights;
+    for (int i = 0; i < numNeurons; i++) 
+        delete newNeurons[i];
+    delete[] newNeurons;
+    delete[] newWeights;
+
+    cout << "Success!" << endl;
 }
 
 void hiddenLayerSetAndGetNeurons()
 {
+    cout << "Testing Hidden Layer setNeurons() & getNeurons()" << endl;
 
+    int numWeights = 3;
+    double* weights = new double[numWeights];
+    weights[0] = 0.023;
+    weights[1] = 1.65;
+    weights[2] = 0.992;
+
+    int numNeurons = 3;
+    HiddenNeuron** neurons = new HiddenNeuron*[numNeurons];
+    neurons[0] = new HiddenNeuron(numWeights, weights);
+    neurons[1] = new HiddenNeuron(numWeights, weights);
+    neurons[2] = new HiddenNeuron(numWeights, weights);
+
+    HiddenLayer* hL = new HiddenLayer(numNeurons, neurons, "relu");
+
+    double* newWeights = new double[numWeights];
+    newWeights[0] = 2.3;
+    newWeights[1] = 16.5;
+    newWeights[2] = 9.92;
+
+    HiddenNeuron** newNeurons = new HiddenNeuron*[numNeurons];
+    newNeurons[0] = new HiddenNeuron(numWeights, newWeights);
+    newNeurons[1] = new HiddenNeuron(numWeights, newWeights);
+    newNeurons[2] = new HiddenNeuron(numWeights, newWeights);
+
+    newNeurons[0]->setValue(1);
+    newNeurons[1]->setValue(2);
+    newNeurons[2]->setValue(3);
+
+    hL->setNeurons(newNeurons);
+
+    HiddenNeuron** resultNeurons = hL->getNeurons();
+    for (int i = 0; i < numNeurons; ++i)
+    {
+        cout << "neuron[" << i << "]: " << newNeurons[i]->getValue();
+    }
+
+    delete hL;
+
+    resultNeurons = nullptr;
+
+    for (int i = 0; i < numNeurons; i++) 
+        delete neurons[i];
+    delete [] neurons;
+    delete [] weights;
+    for (int i = 0; i < numNeurons; i++) 
+        delete newNeurons[i];
+    delete[] newNeurons;
+    delete[] newWeights;
+
+    cout << "Success!" << endl;
 }
 
 void hiddenLayerSetNumNeurons()
 {
+    cout << "Testing Hidden Layer setNumNeurons()" << endl;
 
+    int numWeights = 3;
+    double* weights = new double[numWeights];
+    weights[0] = 0.023;
+    weights[1] = 1.65;
+    weights[2] = 0.992;
+
+    int numNeurons = 3;
+    HiddenNeuron** neurons = new HiddenNeuron*[numNeurons];
+    neurons[0] = new HiddenNeuron(numWeights, weights);
+    neurons[1] = new HiddenNeuron(numWeights, weights);
+    neurons[2] = new HiddenNeuron(numWeights, weights);
+
+    HiddenLayer* hL = new HiddenLayer(numNeurons, neurons, "relu");
+
+    int newNumNeurons = 5;
+
+    hL->setNumNeurons(newNumNeurons);
+
+    delete hL;
+
+    for (int i = 0; i < numNeurons; i++) 
+        delete neurons[i];
+    delete [] neurons;
+    delete [] weights;
+    
+    cout << "Success!" << endl;
 }
 
 void hiddenLayerSetAndGetNumNeurons()
 {
+    cout << "Testing Hidden Layer setNumNeurons() & getNumNeurons()" << endl;
 
+    int numWeights = 3;
+    double* weights = new double[numWeights];
+    weights[0] = 0.023;
+    weights[1] = 1.65;
+    weights[2] = 0.992;
+
+    int numNeurons = 3;
+    HiddenNeuron** neurons = new HiddenNeuron*[numNeurons];
+    neurons[0] = new HiddenNeuron(numWeights, weights);
+    neurons[1] = new HiddenNeuron(numWeights, weights);
+    neurons[2] = new HiddenNeuron(numWeights, weights);
+
+    HiddenLayer* hL = new HiddenLayer(numNeurons, neurons, "relu");
+
+    int newNumNeurons = 5;
+
+    hL->setNumNeurons(newNumNeurons);
+    cout << "Number of Neurons: " << hL->getNumNeurons() << endl;
+
+    delete hL;
+
+    for (int i = 0; i < numNeurons; i++) 
+        delete neurons[i];
+    delete [] neurons;
+    delete [] weights;
+    
+    cout << "Success!" << endl;
 }
 
 void hiddenLayerForwardHiddenLayer()
 {
+    cout << "Testing Hidden Layer forward(HiddenLayer* prevLayer)" << endl;
 
+    int numWeights = 3;
+    double* weights = new double[numWeights];
+    weights[0] = 0.023;
+    weights[1] = 1.65;
+    weights[2] = 0.992;
+
+    int numNeurons = 3;
+    HiddenNeuron** neurons = new HiddenNeuron*[numNeurons];
+    neurons[0] = new HiddenNeuron(numWeights, weights);
+    neurons[1] = new HiddenNeuron(numWeights, weights);
+    neurons[2] = new HiddenNeuron(numWeights, weights);
+
+    HiddenLayer* hL = new HiddenLayer(numNeurons, neurons, "relu");
+
+    HiddenLayer* newHL = new HiddenLayer(numNeurons, neurons, "sigmoid");
+
+    hL->forward(newHL);
+
+    delete newHL;
+    delete hL;
+
+    for (int i = 0; i < numNeurons; i++) 
+        delete neurons[i];
+    delete [] neurons;
+    delete [] weights;
+    
+    cout << "Success!" << endl;
 }
 
 void hiddenLayerForwardInputLayer()
 {
+    cout << "Testing Hidden Layer forward(InputLayer* prevLayer)" << endl;
 
+    int numWeights = 3;
+    double* weights = new double[numWeights];
+    weights[0] = 0.023;
+    weights[1] = 1.65;
+    weights[2] = 0.992;
+
+    int numNeurons = 3;
+    HiddenNeuron** neurons = new HiddenNeuron*[numNeurons];
+    neurons[0] = new HiddenNeuron(numWeights, weights);
+    neurons[1] = new HiddenNeuron(numWeights, weights);
+    neurons[2] = new HiddenNeuron(numWeights, weights);
+
+    HiddenLayer* hL = new HiddenLayer(numNeurons, neurons, "relu");
+
+    InputLayer* iL = new InputLayer(numWeights);
+    iL->setInputs(weights);
+
+    hL->forward(iL);
+
+    delete hL;
+
+    for (int i = 0; i < numNeurons; i++) 
+        delete neurons[i];
+    delete [] neurons;
+    delete [] weights;
+    
+    cout << "Success!" << endl;
 }
 
 void hiddenLayerPrint()
 {
+    cout << "Testing Hidden Layer printLayer()" << endl;
 
+    int numWeights = 3;
+    double* weights = new double[numWeights];
+    weights[0] = 0.023;
+    weights[1] = 1.65;
+    weights[2] = 0.992;
+
+    int numNeurons = 3;
+    HiddenNeuron** neurons = new HiddenNeuron*[numNeurons];
+    neurons[0] = new HiddenNeuron(numWeights, weights);
+    neurons[1] = new HiddenNeuron(numWeights, weights);
+    neurons[2] = new HiddenNeuron(numWeights, weights);
+
+    HiddenLayer* hL = new HiddenLayer(numNeurons, neurons, "relu");
+
+    hL->printLayer();
+
+    delete hL;
+
+    for (int i = 0; i < numNeurons; i++) 
+        delete neurons[i];
+    delete [] neurons;
+    delete [] weights;
+    
+    cout << "Success!" << endl;
 }
 
 void hiddenLayerClear()
 {
+    cout << "Testing Hidden Layer clearLayer()" << endl;
 
+    int numWeights = 3;
+    double* weights = new double[numWeights];
+    weights[0] = 0.023;
+    weights[1] = 1.65;
+    weights[2] = 0.992;
+
+    int numNeurons = 3;
+    HiddenNeuron** neurons = new HiddenNeuron*[numNeurons];
+    neurons[0] = new HiddenNeuron(numWeights, weights);
+    neurons[1] = new HiddenNeuron(numWeights, weights);
+    neurons[2] = new HiddenNeuron(numWeights, weights);
+
+    HiddenLayer* hL = new HiddenLayer(numNeurons, neurons, "relu");
+
+    hL->clearLayer();
+
+    delete hL;
+
+    for (int i = 0; i < numNeurons; i++) 
+        delete neurons[i];
+    delete [] neurons;
+    delete [] weights;
+    
+    cout << "Success!" << endl;
 }
 
 //*********************************************************
