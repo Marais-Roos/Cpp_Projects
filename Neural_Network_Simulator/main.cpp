@@ -4,6 +4,8 @@
 */
 
 #include "InputLayer.h"
+#include "HiddenNeuron.h"
+#include "HiddenLayer.h"
 
 using namespace std;
 
@@ -20,10 +22,32 @@ void inputLayerSetAndGetInputs();
 void inputLayerPrint();
 void inputLayerClear();
 
+void hiddenNeuronConstructor();
+void hiddenNeuronDestructor();
+void hiddenNeuronSetValue();
+void hiddenNeuronSetAndGetValue();
+void hiddenNeuronForwardHiddenLayer();
+void hiddenNeuronForwardInputLayer();
+void hiddenNeuronActivateReLU();
+void hiddenNeuronActivateSigmoid();
+
+
+void hiddenLayerConstructor();
+void hiddenLayerDestructor();
+void hiddenLayerSetNeurons();
+void hiddenLayerSetAndGetNeurons();
+void hiddenLayerSetNumNeurons();
+void hiddenLayerSetAndGetNumNeurons();
+void hiddenLayerForwardHiddenLayer();
+void hiddenLayerForwardInputLayer();
+void hiddenLayerPrint();
+void hiddenLayerClear();
 //*********************************************************
 
 int main()
 {
+    //Test Input Layer
+    cout << "Testing Input Layer" << endl;
     inputLayerConstructor();
     inputLayerDestructor();
     inputLayerSetNumInputs();
@@ -32,6 +56,20 @@ int main()
     inputLayerSetAndGetInputs();
     inputLayerPrint();
     inputLayerClear();
+
+    //Test Hidden Neuron
+    cout << "Testing Hidden Neuron" << endl;
+    hiddenNeuronConstructor();
+    hiddenNeuronDestructor();
+    hiddenNeuronSetValue();
+    hiddenNeuronSetAndGetValue();
+    hiddenNeuronForwardHiddenLayer();
+    hiddenNeuronForwardInputLayer();
+    hiddenNeuronActivateReLU();
+    hiddenNeuronActivateSigmoid();
+
+    //Test Hidden Layer
+    cout << "Testing Hidden Layer" << endl;
 
     return 0;
 }
@@ -173,6 +211,265 @@ void inputLayerClear()
     delete i;
 
     cout << "Success!" << endl;
+}
+
+//*********************************************************
+
+void hiddenNeuronConstructor()
+{
+    cout << "HiddenNeuron Constructor..." << endl;
+
+    int numWeights = 3;
+    double* weights = new double[numWeights];
+    weights[0] = 0.023;
+    weights[1] = 1.65;
+    weights[2] = 0.992;
+
+
+    HiddenNeuron *hN = new HiddenNeuron(numWeights, weights);
+
+    delete [] weights;
+
+    cout << "Success!" << endl;
+}
+
+void hiddenNeuronDestructor()
+{
+    cout << "HiddenNeuron Destructor..." << endl;
+
+    int numWeights = 3;
+    double* weights = new double[numWeights];
+    weights[0] = 0.023;
+    weights[1] = 1.65;
+    weights[2] = 0.992;
+
+    HiddenNeuron *hN = new HiddenNeuron(numWeights, weights);
+
+    delete hN;
+    delete [] weights;
+
+    cout << "Success!" << endl;
+}
+
+void hiddenNeuronSetValue()
+{
+    cout << "HiddenNeuron SetValue()..." << endl;
+
+    int numWeights = 3;
+    double* weights = new double[numWeights];
+    weights[0] = 0.023;
+    weights[1] = 1.65;
+    weights[2] = 0.992;
+
+    HiddenNeuron *hN = new HiddenNeuron(numWeights, weights);
+
+    hN->setValue(5);
+
+    delete hN;
+    delete [] weights;
+
+    cout << "Success!" << endl;
+}
+
+void hiddenNeuronSetAndGetValue()
+{
+    cout << "HiddenNeuron SetValue() & getValue()..." << endl;
+
+    int numWeights = 3;
+    double* weights = new double[numWeights];
+    weights[0] = 0.023;
+    weights[1] = 1.65;
+    weights[2] = 0.992;
+
+    HiddenNeuron *hN = new HiddenNeuron(numWeights, weights);
+
+    hN->setValue(5);
+    
+    double val = hN->getValue();
+
+    cout << "Value: " << val << endl;
+
+    delete hN;
+    delete [] weights;
+
+    cout << "Success!" << endl;
+}
+
+void hiddenNeuronForwardHiddenLayer()
+{
+    cout << "HiddenNeuron forward(HiddenLayer* prevLayer)..." << endl;
+
+    int numWeights = 3;
+    double* weights = new double[numWeights];
+    weights[0] = 0;
+    weights[1] = 0;
+    weights[2] = 0;
+
+    int numNeurons = 3;
+    HiddenNeuron** neurons = new HiddenNeuron*[numNeurons];
+
+    neurons[0] = new HiddenNeuron(numWeights, weights);
+    neurons[1] = new HiddenNeuron(numWeights, weights);
+    neurons[2] = new HiddenNeuron(numWeights, weights);
+    neurons[0]->setValue(0.2);
+    neurons[1]->setValue(0.43);
+    neurons[2]->setValue(0.5);
+
+    string a = "relu";
+
+    HiddenLayer* hL = new HiddenLayer(numNeurons, neurons, a);
+
+    int nW = 3;
+    double* w = new double[nW];
+    w[0] = 0.023;
+    w[1] = 1.65;
+    w[2] = 0.992;
+
+    HiddenNeuron *hN = new HiddenNeuron(nW, w);
+
+    hN->forward(hL);
+    
+    double val = hN->getValue();
+
+    cout << "Value: " << val << endl;
+
+    delete hN;
+    delete [] w;
+    for (int i = 0; i < numNeurons; i++)
+    {
+        delete neurons[i];
+    }
+    delete [] neurons;
+    delete [] weights;
+
+    cout << "Success!" << endl;
+}
+
+void hiddenNeuronForwardInputLayer()
+{
+    cout << "HiddenNeuron forward(InputLayer* prevLayer)..." << endl;
+
+    int numInputs = 3;
+    double* inputs = new double[3];
+    inputs[0] = 0.2;
+    inputs[1] = 0.43;
+    inputs[2] = 0.5;
+
+    InputLayer* iL = new InputLayer(numInputs);
+    iL->setInputs(inputs);
+
+    int nW = 3;
+    double* w = new double[nW];
+    w[0] = 0.023;
+    w[1] = 1.65;
+    w[2] = 0.992;
+
+    HiddenNeuron *hN = new HiddenNeuron(nW, w);
+
+    hN->forward(iL);
+    
+    double val = hN->getValue();
+
+    cout << "Value: " << val << endl;
+
+    delete iL;
+    delete [] inputs;
+    delete hN;
+    delete [] w;
+
+    cout << "Success!" << endl;
+}
+
+void hiddenNeuronActivateReLU()
+{
+    cout << "HiddenNeuron activateReLU()..." << endl;
+
+    int numWeights = 3;
+    double* weights = new double[numWeights];
+    weights[0] = 0.023;
+    weights[1] = 1.65;
+    weights[2] = 0.992;
+
+    HiddenNeuron *hN = new HiddenNeuron(numWeights, weights);
+    hN->setValue(1.2102);
+    hN->activateReLU();
+    double val = hN->getValue();
+
+    cout << "Value: " << val << endl;
+
+    cout << "Success!" << endl;
+}
+
+void hiddenNeuronActivateSigmoid()
+{
+    cout << "HiddenNeuron activateSigmoid()..." << endl;
+
+    int numWeights = 3;
+    double* weights = new double[numWeights];
+    weights[0] = 0.023;
+    weights[1] = 1.65;
+    weights[2] = 0.992;
+
+    HiddenNeuron *hN = new HiddenNeuron(numWeights, weights);
+    hN->setValue(1.2102);
+    hN->activateSigmoid();
+    double val = hN->getValue();
+
+    cout << "Value: " << val << endl;
+
+    cout << "Success!" << endl;
+}
+
+//*********************************************************
+
+void hiddenLayerConstructor()
+{
+
+}
+
+void hiddenLayerDestructor()
+{
+
+}
+
+void hiddenLayerSetNeurons()
+{
+
+}
+
+void hiddenLayerSetAndGetNeurons()
+{
+
+}
+
+void hiddenLayerSetNumNeurons()
+{
+
+}
+
+void hiddenLayerSetAndGetNumNeurons()
+{
+
+}
+
+void hiddenLayerForwardHiddenLayer()
+{
+
+}
+
+void hiddenLayerForwardInputLayer()
+{
+
+}
+
+void hiddenLayerPrint()
+{
+
+}
+
+void hiddenLayerClear()
+{
+
 }
 
 //*********************************************************

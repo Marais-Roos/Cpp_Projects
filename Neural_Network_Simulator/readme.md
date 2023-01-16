@@ -48,23 +48,23 @@ This project is significantly simplified compared to real-life implementations. 
 #### Member Functions
 
 - ```InputLayer(int numInputs)```
- - Constructor that accepts the ```numInputs``` as a parameter and sets the corresponding member variable.
+    - Constructor that accepts the ```numInputs``` as a parameter and sets the corresponding member variable.
 - ```~InputLayer()```
- - Destructor that deallocates the ```inputs``` array
+    - Destructor that deallocates the ```inputs``` array
 - ```getInputs()```
- - Returns the ```inputs``` array
+    - Returns the ```inputs``` array
 - ```getNumInputs()```
- - Returns the number of the inputs of the NN
+    - Returns the number of the inputs of the NN
 - ```setInputs(double* inputs)```
- - Sets the ```inputs``` member variable to the argument (without a deep copy).
- - If inputs are already set, the existing inputs should be deallocated first.
+    - Sets the ```inputs``` member variable to the argument (without a deep copy).
+    - If inputs are already set, the existing inputs should be deallocated first.
 - ```setNumInputs(int numInputs)```
- - Sets the ```numInputs``` member variable to the value of the argument
+    - Sets the ```numInputs``` member variable to the value of the argument
 - ```printLayer()```
- - Prints the string ```i:x``` where ```x``` is the ```numInputs``` of this layer.
+    - Prints the string ```i:x``` where ```x``` is the ```numInputs``` of this layer.
 - ```clearLayer()```
- - Sets each element of the ```inputs``` array to zero.
- - If the inputs array is NULL, then do nothing.
+    - Sets each element of the ```inputs``` array to zero.
+    - If the inputs array is NULL, then do nothing.
 
 ### Hidden Neuron
 
@@ -98,14 +98,59 @@ The class represents a single neuron stored in the hidden layer, hidden neurons 
 - ```getValue()``` returns the value of this neuron.
 - ```setValue(double value)``` sets the ```value``` of this neuron to the value of the argument.
 - ```forward(HiddenLayer* prevLayer)``` responsible for calculating the new ```value``` of this neuron. 
- - Multiplies the value of each neuron in the previous hidden layer by the corresponding weight in the ```weights``` array of this neuron. 
-  - Each product is then summed up to produce the new value.
+    - Multiplies the value of each neuron in the previous hidden layer by the corresponding weight in the ```weights``` array of this neuron. 
+    - Each product is then summed up to produce the new value.
 - ```forward(InputLayer* prevLayer)``` is an overload of the ```forward``` function which performs a forward operation given an ```InputLayer``` instead of a ```HiddenLayer```.
- - It is only necessary when the previous layer is the ```InputLayer```, this implies that the neuron is in the first ```HiddenLayer``` after the ```InputLayer```.
- - The calculations are same, except that the ```inputs``` array is used instead of the neurons weights.
+    - It is only necessary when the previous layer is the ```InputLayer```, this implies that the neuron is in the first ```HiddenLayer``` after the ```InputLayer```.
+    - The calculations are same, except that the ```inputs``` array is used instead of the neurons weights.
 - ```activateReLU()``` applies the ReLU function to the ```value``` stored in this neuron, and sets the ```value``` to the result.
- - Defined as $f(value) = max(0, value)$
+    - Defined as $f(value) = max(0, value)$
 - ```activateSigmoid()``` applies the ```Sigmoid``` function to the ```value``` stored in this neuron, and sets the ```value``` to the result.
-  $$
-  sigmoid(value) = 1 \over 1 + e^-value
-  $$
+    $sigmoid(value) = 1 \over 1 + e^-value$
+
+### Hidden Layer
+
+A ```HiddenLayer``` contains an array of ```HiddenNeurons```. This class orchestrates the movement of values from the previous layer into this layer by calling the ```forward``` function for each of its neurons. A special case occurs for first hidden layer in the network because it receives input from an ```InputLayer``` instead of another ```HiddenLayer```. After values have moved forward into this layer, an activation function is invoked for each ```HiddenNeuron``` based on the ```activation``` member variable.
+
+```
+- numNeurons: int
+- neurons: HiddenNeuron**
+- activation: string
+---
++ HiddenLayer(numNeurons: int, neurons: HiddenNeuron**, activation: string)
++ ~HiddenLayer()
++ getNeurons(): HiddenNeuron**
++ setNeurons(neurons: HiddenNeuron**): void
++ getNumNeurons(): int
++ setNumNeurons(numNeurons: int): void
++ forward(prevLayer: HiddenLayer*): void
++ forward(prevLayer: InputLayer*): void
++ printLayer(): void
++ clearLayer(): void
+```
+
+#### Member Variables
+
+- ```numNeurons``` represents the number of neurons that this layer holds.
+- ```neurons``` array of dynamically allocated ```HiddenNeuron``` objects.
+- ```activaton``` a string which determines which activation funcion this ```HiddenLayer``` will use.
+    - "relu": ```ReLU``` function will be used.
+    - "sigmoid": ```Sigmoid``` function will be used.
+    - If the string does not match one of these, no activation will be performed.
+
+#### Member Functions
+
+- ```HiddenLayer(int numNeurons, HiddenNeuron** neurons, string activaton)``` constructor receives arguments and assigns them to the corresponding member variables.
+    - No deep copy is performed for the ```neurons``` array
+- ```~HiddenLayer()``` destructor deallocates the ```neurons``` array
+- ```getNeurons()``` returns the ```neurons``` array
+- ```setNeurons(HiddenNeuron** neurons)``` sets the ```neurons``` member variable to the array argument.
+    - If neurons are already set, memory for the neurons must be deallocated first.
+- ```getNumNeurons()``` returns the ```numNeurons``` member variable.
+- ```setNumNeurons(int numNeurons)``` sets the ```numNeurons`` member variable.
+- ```forward(HiddenLayer* prevLayer)``` performs the ```forward``` operation for each neuron in this ```HiddenLayer```.
+    - After each neuron has performed a forward operation, this function activates each neuron based on the value of the activation member variables).
+- ```forward(InputLayer* prevLayer)``` is similar to the ```forward(HiddenLayer* prevLayer)``` function with the only difference being that that the forward operation makes use of the ```InputLayer``` which assumes that this hidden layer is the first hidden layer in the network.
+    - Activations apply the same way as the aforementioned ```forward(InputLayer* prevLayer)``.
+- ```printLayer()``` prints the string ```h:x:a``` where ```x``` is the ```numNeurons``` of this layer and ```a``` is the activation of this layer.
+- ```clearLayer()``` sets the value of each ```HiddenNeuron``` in the ```neurons``` array to zero.
