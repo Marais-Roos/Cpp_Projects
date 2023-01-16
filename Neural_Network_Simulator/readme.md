@@ -108,6 +108,38 @@ The class represents a single neuron stored in the hidden layer, hidden neurons 
 - ```activateSigmoid()``` applies the ```Sigmoid``` function to the ```value``` stored in this neuron, and sets the ```value``` to the result.
   $sigmoid(value) = {1 \over 1 + e^-value}$
 
+
+### Hidden Layer
+
+A ```HiddenLayer``` class contains an array of ```HiddenNeuron``` objects. This class orchestrates the movement of values from the previous layer into this layer by calling the ```forward``` function for each of its neurons. A special case occurs for **first** hidden layer in the network because it receives input from an ```InputLayer``` instead of another ```HiddenLayer```. After values have moved forward into this layer, an activation function is invoked for each ```HiddenNeuron``` based on the ```activation``` member variable.
+
+```
+- numNeurons : int
+- neurons: HiddenNeuron**
+- activation : string
+---
++ HiddenLayer(numNeurons : int, neurons : HiddenNeuron**. activation : string)
++ ~HiddenLayer()
++ getNeurons() : HiddenNeuron**
++ setNeurons(neurons : HiddenNeuron**) : void
++ getNumNeurons() : int
++ setNumNeurons(numNeurons : int) : void
++ forward(prevLayer : HiddenLayer*) : void
++ forward(prevLayer : InputLayer*) : void
++ printLayer() : void
++ clearLayer() : void
+```
+
+#### Member Variables
+
+- ```numNeurons``` represents the number of neurons this layer holds.
+- ```neurons``` a dynamically allocated array of ```HiddenNeuron``` objects
+- ```activation``` a string variable which determines which activation this ```HiddenLayer``` will use.
+    - "relu": ```ReLU``` function will be used.
+    - "sigmoid": ```sigmoid``` function will be used
+
+#### Member Functions
+
 - ```HiddenLayer(int numNeurons, HiddenNeuron** neurons, string activaton)``` constructor receives arguments and assigns them to the corresponding member variables.
     - No deep copy is performed for the ```neurons``` array
 - ```~HiddenLayer()``` destructor deallocates the ```neurons``` array
