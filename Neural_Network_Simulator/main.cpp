@@ -3,10 +3,7 @@
     operation of the different classes used in this program.
 */
 
-#include "InputLayer.h"
-#include "HiddenNeuron.h"
-#include "HiddenLayer.h"
-#include "OutputLayer.h"
+#include "NeuralNetwork.h"
 
 using namespace std;
 
@@ -50,6 +47,12 @@ void outputLayerSetAndGetOutputValue();
 void outputLayerForwardLastHiddenLayer();
 void outputLayerPrint();
 void outputLayerClear();
+
+void neuralNetworkConstructor();
+void neuralNetworkDestructor();
+void neuralNetworkForward();
+void neuralNetworkPrint();
+void neuralNetworkClear();
 //*********************************************************
 
 int main()
@@ -98,6 +101,16 @@ int main()
     outputLayerForwardLastHiddenLayer();
     outputLayerPrint();
     outputLayerClear();
+
+    //Test Neural Network
+    cout << "Testing Neural Network" << endl;
+    neuralNetworkConstructor();
+    neuralNetworkDestructor();
+    neuralNetworkForward();
+    neuralNetworkPrint();
+    neuralNetworkClear();
+
+    cout <<  "\nAll tests passed!" << endl;
 
     return 0;
 }
@@ -876,7 +889,7 @@ void outputLayerForwardLastHiddenLayer()
     neurons[1] = new HiddenNeuron(numWeights, weights);
     neurons[2] = new HiddenNeuron(numWeights, weights);
 
-    HiddenLayer* hL = new HiddenLayer(numNeurons, neurons, "relu");
+    HiddenLayer* hL = new HiddenLayer(numNeurons, neurons, "sigmoid");
 
     OutputLayer* oL = new OutputLayer(numWeights, weights);
 
@@ -930,3 +943,68 @@ void outputLayerClear()
 }
 
 //*********************************************************
+
+void neuralNetworkConstructor()
+{
+    cout << "Testing Neural Network Constructor" << endl;
+    
+    NeuralNetwork* network = new NeuralNetwork("mean.txt");
+
+    cout << "Success!" << endl;
+}
+
+void neuralNetworkDestructor()
+{
+    cout << "Testing Neural Network Destructor" << endl;
+    
+    NeuralNetwork* network = new NeuralNetwork("mean.txt");
+    delete network;
+
+    cout << "Success!" << endl;
+}
+
+void neuralNetworkForward()
+{
+    cout << "Testing Neural Network forward operation" << endl;
+    
+    NeuralNetwork* network = new NeuralNetwork("mean.txt");
+
+    double* inputs = new double[5];
+    inputs[0] = 5.0;
+    inputs[1] = 10.0;
+    inputs[2] = 15.0;
+    inputs[3] = 20.0;
+    inputs[4] = 25.0;
+
+    cout << "Output: " << network->forward(inputs) << endl;
+
+    delete network;
+
+    cout << "Success!" << endl;
+}
+
+void neuralNetworkPrint()
+{
+    cout << "Testing Neural Network printNetwork()" << endl;
+    
+    NeuralNetwork* network = new NeuralNetwork("mean.txt");
+
+    network->printNetwork();
+
+    delete network;
+
+    cout << "Success!" << endl;
+}
+
+void neuralNetworkClear()
+{
+    cout << "Testing Neural Network clearNetwork()" << endl;
+    
+    NeuralNetwork* network = new NeuralNetwork("mean.txt");
+
+    network->clearNetwork();
+
+    delete network;
+
+    cout << "Success!" << endl;
+}

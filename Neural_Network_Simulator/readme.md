@@ -190,3 +190,52 @@ The ```OutputLayer``` essentially represents the single output neuron. Therefore
 - ```forward(HiddenLayer* lastHiddenLayer)``` performs a forward operation using the ```weights``` member variable and the last ```HiddenLayer``` which is passed as a parameter. The ```outputValue``` is set as the result of this operation.
 - ```printLayer()``` prints the string ```o:1``` as there is always only one output in this layer
 - ```clearLayer()``` sets the ```outputValue``` member variable to zero
+
+### NeuralNetwork
+
+The ``NeuralNetwork`` class is an aggregation of the different layer types. The NN is guaranteed to have one ``Input`Layer``, one ```OutputLayer``` and at least one ```HiddenLayer```. The ```NeuralNetwork``` class is responsible for feeding values from the ```InputLayer``` of the network up until the ```OutputLayer``` of the network and returning the single ```int``` result.
+
+```
+- inputLayer : InputLayer*
+- numHiddenLayers : int
+- hiddenLayers : HiddenLayer**
+- outputLayer : OutputLayer*
+---
++ NeuralNetwork(filePath : string)
++ ~NeuralNetwork()
++ forward(input : double*) : double
++ printNetwork() : void
++ clearNetwork() : void
+```
+
+#### Member Variables
+
+- ```inputLayer``` is a pointer to a dynamically allocated ```InputLayer``` object.
+    - This is the input layer of the NN.
+- ```numHiddenLayers``` contains the number of HiddenLayer's contained in the ```hiddenLayers``` array.
+- ```hiddenLayers``` a dynamic array containing pointers to ```HiddenLayer``` objects.
+- ```outputLayer``` is a pointer to a dynamically allocated ```OutputLayer``` object.
+    - This is the output layer of the NN. 
+    - For this project, ```OutputLayer``` is synonymous with an output neuron since there will only be one output neuron for NNs in this project.
+
+#### Member Functions
+
+- ```NeuralNetwork(string filePath)``` constructor receives a path to a text file which contains a definition for how the NN should be constructed. The text file provides all the necessary information to create the NN. This constructor will use the text file to instantiate all of the member variables of this class, dynamically allocating memory as required.
+- ```~NeuralNetwork()``` deallocates all dynamic memory created in this class.
+- ```forward(*double input)``` feeds the ```input``` array of inputs forward through the entire network. 
+    - Values should propagate from the input layer to the output layer. Finally, the ```outputValue``` in the ```outputLayer``` should be returned.
+- ```printNetwork()``` calls the ```printLayer``` function of each layer in the NN in the forward order of the NN.
+- ```clearNetwork()``` calls the ```clearLayer``` function for each layer in this NN.
+
+## Implementation
+
+### Configuration Text File
+
+A text file will be used to instantiate all of the member variables of this class.
+
+1. It is assumed that the text file will always provide a valid configuration.
+2. Weights are space separated and are of arbitrary precision.
+3. The Neural Network will also read in scientific notation ```double```s.
+
+Below is an example text file NN configuration.
+![Example_Neural_Network_configuration_file](Screenshot 2023-01-16 170116.png)
