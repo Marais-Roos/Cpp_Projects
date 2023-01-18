@@ -239,3 +239,30 @@ A text file will be used to instantiate all of the member variables of this clas
 
 Below is an example text file NN configuration.
 ![Example_Neural_Network_configuration_file](Screenshot 2023-01-16 170116.png)
+
+### Libraries used
+
+1. ```iostream```
+    Used to output basic output to the terminal.
+2. ```string```
+    Used to extract the configuration from the text file.
+3. ```iomanip```
+    Used to format output to the terminal.
+4. ```algorithm```
+    Used in one case, in the ReLU activation function, the program has to find the maximum between the value and zero.
+5. ```sstream```
+    Was also used to extract the configuration from the text file.
+6. ```math.h``` 
+    Used in one case, in the Sigmoid activation function, the program has to use an Eulers number to calculate the new value.
+7. ```fstream``` 
+    Used for the extraction of text from the input text file
+
+### System
+
+- The program was built on the Windows Subsystem for Linux (WSL) in Visual Studio Code. 
+- Tools used:
+    - g++ compiler
+    - make
+        - In the makefile I used to streamline the compilation and testing process
+    - valgrind
+        - I used the valgrind tool to check for memory leaks
