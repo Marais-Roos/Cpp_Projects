@@ -7,1004 +7,136 @@
 
 using namespace std;
 
-//*********************************************************
-//FUNCTION PROTOTYPES
-//*********************************************************
-
-void inputLayerConstructor();
-void inputLayerDestructor();
-void inputLayerSetNumInputs();
-void inputLayerSetAndGetNumInputs();
-void inputLayerSetInputs();
-void inputLayerSetAndGetInputs();
-void inputLayerPrint();
-void inputLayerClear();
-
-void hiddenNeuronConstructor();
-void hiddenNeuronDestructor();
-void hiddenNeuronSetValue();
-void hiddenNeuronSetAndGetValue();
-void hiddenNeuronForwardHiddenLayer();
-void hiddenNeuronForwardInputLayer();
-void hiddenNeuronActivateReLU();
-void hiddenNeuronActivateSigmoid();
-
-void hiddenLayerConstructor();
-void hiddenLayerDestructor();
-void hiddenLayerSetNeurons();
-void hiddenLayerSetAndGetNeurons();
-void hiddenLayerSetNumNeurons();
-void hiddenLayerSetAndGetNumNeurons();
-void hiddenLayerForwardHiddenLayer();
-void hiddenLayerForwardInputLayer();
-void hiddenLayerPrint();
-void hiddenLayerClear();
-
-void outputLayerConstructor();
-void outputLayerDestructor();
-void outputLayerSetOutputValue();
-void outputLayerSetAndGetOutputValue();
-void outputLayerForwardLastHiddenLayer();
-void outputLayerPrint();
-void outputLayerClear();
-
-void neuralNetworkConstructor();
-void neuralNetworkDestructor();
-void neuralNetworkForward();
-void neuralNetworkPrint();
-void neuralNetworkClear();
-//*********************************************************
-
 int main()
 {
-    //Test Input Layer
-    cout << "Testing Input Layer" << endl;
-    inputLayerConstructor();
-    inputLayerDestructor();
-    inputLayerSetNumInputs();
-    inputLayerSetAndGetNumInputs();
-    inputLayerSetInputs();
-    inputLayerSetAndGetInputs();
-    inputLayerPrint();
-    inputLayerClear();
+    //the size for the array of each type of calculation
+    int num_mean = 4;
+    int num_sin = 5;
+    int num_squared = 5;
 
-    //Test Hidden Neuron
-    cout << "Testing Hidden Neuron" << endl;
-    hiddenNeuronConstructor();
-    hiddenNeuronDestructor();
-    hiddenNeuronSetValue();
-    hiddenNeuronSetAndGetValue();
-    hiddenNeuronForwardHiddenLayer();
-    hiddenNeuronForwardInputLayer();
-    hiddenNeuronActivateReLU();
-    hiddenNeuronActivateSigmoid();
+    //create dynmaic arrays of respective neural network objects
+    NeuralNetwork** means = new NeuralNetwork*[num_mean];
+    NeuralNetwork** sin_x = new NeuralNetwork*[num_sin];
+    NeuralNetwork** x_squared = new NeuralNetwork*[num_squared];
 
-    //Test Hidden Layer
-    cout << "Testing Hidden Layer" << endl;
-    hiddenLayerConstructor();
-    hiddenLayerDestructor();
-    hiddenLayerSetNeurons();
-    hiddenLayerSetAndGetNeurons();
-    hiddenLayerSetNumNeurons();
-    hiddenLayerSetAndGetNumNeurons();
-    hiddenLayerForwardHiddenLayer();
-    hiddenLayerForwardInputLayer();
-    hiddenLayerPrint();
-    hiddenLayerClear();
+    //instantiate each neural network object with the corresponding text file
+    for (int i = 0; i < 5; i++)
+    {
+        means[i] = new NeuralNetwork("mean.txt");
+        sin_x[i] = new NeuralNetwork("sin(x).txt");
+        x_squared[i] = new NeuralNetwork("x_squared.txt");
+    }
+
+    //enter the input to be passed through the neural network
+    double** mean_inputs = new double*[num_mean];
+    mean_inputs[0] = new double[5] {5.0, 10.0, 15.0, 20.0, 25.0};
+    mean_inputs[1] = new double[5] {0.0, 10.0, 20.0, 30.0, 40.0};
+    mean_inputs[2] = new double[5] {-1.0, -2.0, -3.0, -4.0, -5.0};
+    mean_inputs[3] = new double[5] {50.0, -2.0, -32.0, 60.0, -10.0};
+
+    double** sin_x_inputs = new double*[num_sin];
+    sin_x_inputs[0] = new double[1] {0.0};
+    sin_x_inputs[1] = new double[1] {1.0};
+    sin_x_inputs[2] = new double[1] {-1.0};
+    sin_x_inputs[3] = new double[1] {5.0};
+    sin_x_inputs[4] = new double[1] {1.5};
+
+    double** x_squared_inputs = new double*[num_squared];
+    x_squared_inputs[0] = new double[1] {2.0};
+    x_squared_inputs[1] = new double[1] {4.0};
+    x_squared_inputs[2] = new double[1] {8.0};
+    x_squared_inputs[3] = new double[1] {-4.0};
+    x_squared_inputs[4] = new double[1] {-10.0};
     
-    //Test Output Layer
-    cout << "Testing Output Layer" << endl;
-    outputLayerConstructor();
-    outputLayerDestructor();
-    outputLayerSetOutputValue();
-    outputLayerSetAndGetOutputValue();
-    outputLayerForwardLastHiddenLayer();
-    outputLayerPrint();
-    outputLayerClear();
+    //display the input and forward the inputs through the neural network
+    cout << "This network approximates the mean of the 5 input values:" << endl << endl;
+    
+    for (int i = 0; i < num_mean; i++)
+    {
+        cout << "Input: [";
+        for (int j = 0; j < 5; j++)
+        {
+            if (j == 4)
+            {
+                cout << fixed << showpoint << setprecision(2);
+                cout << mean_inputs[i][j] << "]" << endl;
+            }
+            else
+            {
+                cout << fixed << showpoint << setprecision(2);
+                cout << mean_inputs[i][j] << " ";
+            }
+        }
+        cout << fixed << showpoint << setprecision(4);
+        cout << "Output: " << means[i]->forward(mean_inputs[i]) << endl;
+        means[i]->printNetwork(); //display the networks information
+        cout << endl;
+    }
+    cout << endl;
 
-    //Test Neural Network
-    cout << "Testing Neural Network" << endl;
-    neuralNetworkConstructor();
-    neuralNetworkDestructor();
-    neuralNetworkForward();
-    neuralNetworkPrint();
-    neuralNetworkClear();
+    cout << "This network approximates x squared in the range [-100, 100]:" << endl << endl;
+    for (int i = 0; i < num_squared; i++)
+    {
+        cout << "Input: [";
+        cout << fixed << showpoint << setprecision(2);
+        cout << x_squared_inputs[i][0] << "]" << endl;
+        cout << "Output: " << fixed << showpoint << setprecision(4) << x_squared[i]->forward(x_squared_inputs[i]) << endl;
+        x_squared[i]->printNetwork(); //display the networks information
+        cout << endl;
+    }
+    cout << endl;
 
-    cout <<  "\nAll tests passed!" << endl;
+    cout << "This network approximates the function sin(x) where x is in radians in the range [-10, 10]:" << endl << endl;
+    for (int i = 0; i < num_sin; i++)
+    {
+        cout << "Input: [";
+        cout << fixed << showpoint << setprecision(2);
+        cout << sin_x_inputs[i][0] << "]" << endl;
+        cout << "Output: " << fixed << showpoint << setprecision(4) <<  sin_x[i]->forward(sin_x_inputs[i]) << endl;
+        sin_x[i]->printNetwork(); //display the networks information
+        cout << endl;
+    }
+    cout << endl;
+
+    //clear the respective networks and free the memory used by the program
+    for (int i = 0; i < num_mean; i++)
+    {
+        means[i]->clearNetwork();
+        delete means[i];
+    }
+    delete [] means;
+
+    for (int i = 0; i < num_squared; i++)
+    {
+        x_squared[i]->clearNetwork();
+        delete x_squared[i];
+    }
+    delete [] x_squared;
+
+    for (int i = 0; i < num_sin; i++)
+    {
+        sin_x[i]->clearNetwork();
+        delete sin_x[i];
+    }
+    delete [] sin_x;
+
+    for (int i = 0; i < 5; i++)
+    {
+        if (i == 4)
+        {
+            delete x_squared_inputs[i];
+            delete sin_x_inputs[i];
+        }
+        else
+        {
+            delete x_squared_inputs[i];
+            delete sin_x_inputs[i];
+            delete mean_inputs[i];
+        }
+    }
+    delete [] mean_inputs;
+    delete [] sin_x_inputs;
+    delete [] x_squared_inputs;
 
     return 0;
-}
-
-//*********************************************************
-//FUNCTION DEFINITIONS
-//*********************************************************
-
-void inputLayerConstructor()
-{
-    cout << "InputLayer Constructor..." << endl;
-
-    int numInputs = 5;
-    InputLayer *i = new InputLayer(numInputs);
-
-    cout << "Success!" << endl;
-}
-
-void inputLayerDestructor()
-{
-    cout << "InputLayer Destructor..." << endl;
-
-    int numInputs = 5;
-    InputLayer *i = new InputLayer(numInputs);
-
-    delete i;
-
-    cout << "Success!" << endl;
-}
-
-void inputLayerSetNumInputs()
-{
-    cout << "InputLayer set numInputs..." << endl;
-
-    int numInputs = 5;
-    InputLayer *i = new InputLayer(numInputs);
-
-    int newInputs = 3;
-    i->setNumInputs(newInputs);
-
-    delete i;
-
-    cout << "Success!" << endl;
-}
-
-void inputLayerSetAndGetNumInputs()
-{
-    cout << "InputLayer Set And Get numInputs..." << endl;
-
-    int numInputs = 5;
-    InputLayer *i = new InputLayer(numInputs);
-
-    int newInputs = 3;
-    i->setNumInputs(newInputs);
-
-    cout << i->getNumInputs() << endl;
-
-    delete i;
-
-    cout << "Success!" << endl;
-}
-
-void inputLayerSetInputs()
-{
-    cout << "InputLayer setInputs function..." << endl;
-
-    int numInputs = 5;
-    InputLayer *i = new InputLayer(numInputs);
-
-    double* vals = new double[numInputs];
-    vals[0] = 3.14;
-    vals[1] = 4.56;
-    vals[2] = 5.89;
-    vals[3] = 9.234;
-    vals[4] = 0.34;
-
-    i->setInputs(vals);
-
-    delete i;
-
-    delete [] vals;
-    vals = nullptr;
-
-    cout << "Success!" << endl;
-}
-
-void inputLayerSetAndGetInputs()
-{
-    cout << "InputLayer set and get Inputs function..." << endl;
-
-    int numInputs = 5;
-    InputLayer *i = new InputLayer(numInputs);
-
-    double* vals = new double[numInputs];
-    vals[0] = 3.14;
-    vals[1] = 4.56;
-    vals[2] = 5.89;
-    vals[3] = 9.234;
-    vals[4] = 0.34;
-
-    i->setInputs(vals);
-
-    for (int j = 0; j < numInputs; j++)
-    {
-        cout << i->getInputs()[j] << endl;
-    }
-
-    delete i;
-
-    delete [] vals;
-    vals = nullptr;
-
-    cout << "Success!" << endl;
-}
-
-void inputLayerPrint()
-{
-    cout << "InputLayer printLayer..." << endl;
-
-    int numInputs = 5;
-    InputLayer *i = new InputLayer(numInputs);
-
-    i->printLayer();
-
-    delete i;
-
-    cout << "Success!" << endl;
-}
-
-void inputLayerClear()
-{
-    cout << "InputLayer clearLayer..." << endl;
-
-    int numInputs = 5;
-    InputLayer *i = new InputLayer(numInputs);
-
-    i->clearLayer();
-
-    delete i;
-
-    cout << "Success!" << endl;
-}
-
-//*********************************************************
-
-void hiddenNeuronConstructor()
-{
-    cout << "HiddenNeuron Constructor..." << endl;
-
-    int numWeights = 3;
-    double* weights = new double[numWeights];
-    weights[0] = 0.023;
-    weights[1] = 1.65;
-    weights[2] = 0.992;
-
-
-    HiddenNeuron *hN = new HiddenNeuron(numWeights, weights);
-
-    delete [] weights;
-
-    cout << "Success!" << endl;
-}
-
-void hiddenNeuronDestructor()
-{
-    cout << "HiddenNeuron Destructor..." << endl;
-
-    int numWeights = 3;
-    double* weights = new double[numWeights];
-    weights[0] = 0.023;
-    weights[1] = 1.65;
-    weights[2] = 0.992;
-
-    HiddenNeuron *hN = new HiddenNeuron(numWeights, weights);
-
-    delete hN;
-    delete [] weights;
-
-    cout << "Success!" << endl;
-}
-
-void hiddenNeuronSetValue()
-{
-    cout << "HiddenNeuron SetValue()..." << endl;
-
-    int numWeights = 3;
-    double* weights = new double[numWeights];
-    weights[0] = 0.023;
-    weights[1] = 1.65;
-    weights[2] = 0.992;
-
-    HiddenNeuron *hN = new HiddenNeuron(numWeights, weights);
-
-    hN->setValue(5);
-
-    delete hN;
-    delete [] weights;
-
-    cout << "Success!" << endl;
-}
-
-void hiddenNeuronSetAndGetValue()
-{
-    cout << "HiddenNeuron SetValue() & getValue()..." << endl;
-
-    int numWeights = 3;
-    double* weights = new double[numWeights];
-    weights[0] = 0.023;
-    weights[1] = 1.65;
-    weights[2] = 0.992;
-
-    HiddenNeuron *hN = new HiddenNeuron(numWeights, weights);
-
-    hN->setValue(5);
-    
-    double val = hN->getValue();
-
-    cout << "Value: " << val << endl;
-
-    delete hN;
-    delete [] weights;
-
-    cout << "Success!" << endl;
-}
-
-void hiddenNeuronForwardHiddenLayer()
-{
-    cout << "HiddenNeuron forward(HiddenLayer* prevLayer)..." << endl;
-
-    int numWeights = 3;
-    double* weights = new double[numWeights];
-    weights[0] = 0;
-    weights[1] = 0;
-    weights[2] = 0;
-
-    int numNeurons = 3;
-    HiddenNeuron** neurons = new HiddenNeuron*[numNeurons];
-
-    neurons[0] = new HiddenNeuron(numWeights, weights);
-    neurons[1] = new HiddenNeuron(numWeights, weights);
-    neurons[2] = new HiddenNeuron(numWeights, weights);
-    neurons[0]->setValue(0.2);
-    neurons[1]->setValue(0.43);
-    neurons[2]->setValue(0.5);
-
-    string a = "relu";
-
-    HiddenLayer* hL = new HiddenLayer(numNeurons, neurons, a);
-
-    int nW = 3;
-    double* w = new double[nW];
-    w[0] = 0.023;
-    w[1] = 1.65;
-    w[2] = 0.992;
-
-    HiddenNeuron *hN = new HiddenNeuron(nW, w);
-
-    hN->forward(hL);
-    
-    double val = hN->getValue();
-
-    cout << "Value: " << val << endl;
-
-    delete hN;
-    delete [] w;
-    for (int i = 0; i < numNeurons; i++)
-    {
-        delete neurons[i];
-    }
-    delete [] neurons;
-    delete [] weights;
-
-    cout << "Success!" << endl;
-}
-
-void hiddenNeuronForwardInputLayer()
-{
-    cout << "HiddenNeuron forward(InputLayer* prevLayer)..." << endl;
-
-    int numInputs = 3;
-    double* inputs = new double[3];
-    inputs[0] = 0.2;
-    inputs[1] = 0.43;
-    inputs[2] = 0.5;
-
-    InputLayer* iL = new InputLayer(numInputs);
-    iL->setInputs(inputs);
-
-    int nW = 3;
-    double* w = new double[nW];
-    w[0] = 0.023;
-    w[1] = 1.65;
-    w[2] = 0.992;
-
-    HiddenNeuron *hN = new HiddenNeuron(nW, w);
-
-    hN->forward(iL);
-    
-    double val = hN->getValue();
-
-    cout << "Value: " << val << endl;
-
-    delete iL;
-    delete [] inputs;
-    delete hN;
-    delete [] w;
-
-    cout << "Success!" << endl;
-}
-
-void hiddenNeuronActivateReLU()
-{
-    cout << "HiddenNeuron activateReLU()..." << endl;
-
-    int numWeights = 3;
-    double* weights = new double[numWeights];
-    weights[0] = 0.023;
-    weights[1] = 1.65;
-    weights[2] = 0.992;
-
-    HiddenNeuron *hN = new HiddenNeuron(numWeights, weights);
-    hN->setValue(1.2102);
-    hN->activateReLU();
-    double val = hN->getValue();
-
-    cout << "Value: " << val << endl;
-
-    cout << "Success!" << endl;
-}
-
-void hiddenNeuronActivateSigmoid()
-{
-    cout << "HiddenNeuron activateSigmoid()..." << endl;
-
-    int numWeights = 3;
-    double* weights = new double[numWeights];
-    weights[0] = 0.023;
-    weights[1] = 1.65;
-    weights[2] = 0.992;
-
-    HiddenNeuron *hN = new HiddenNeuron(numWeights, weights);
-    hN->setValue(1.2102);
-    hN->activateSigmoid();
-    double val = hN->getValue();
-
-    cout << "Value: " << val << endl;
-
-    cout << "Success!" << endl;
-}
-
-//*********************************************************
-
-void hiddenLayerConstructor()
-{
-    cout << "Testing Hidden Layer Constructor" << endl;
-    int numWeights = 3;
-    double* weights = new double[numWeights];
-    weights[0] = 0.023;
-    weights[1] = 1.65;
-    weights[2] = 0.992;
-
-    int numNeurons = 3;
-    HiddenNeuron** neurons = new HiddenNeuron*[numNeurons];
-    neurons[0] = new HiddenNeuron(numWeights, weights);
-    neurons[1] = new HiddenNeuron(numWeights, weights);
-    neurons[2] = new HiddenNeuron(numWeights, weights);
-
-    HiddenLayer* hL = new HiddenLayer(numNeurons, neurons, "relu");
-
-    for (int i = 0; i < numNeurons; i++) 
-        delete neurons[i];
-    delete [] neurons;
-    delete [] weights;
-
-    cout << "Success!" << endl;
-}
-
-void hiddenLayerDestructor()
-{
-    cout << "Testing Hidden Layer Destructor" << endl;
-
-    int numWeights = 3;
-    double* weights = new double[numWeights];
-    weights[0] = 0.023;
-    weights[1] = 1.65;
-    weights[2] = 0.992;
-
-    int numNeurons = 3;
-    HiddenNeuron** neurons = new HiddenNeuron*[numNeurons];
-    neurons[0] = new HiddenNeuron(numWeights, weights);
-    neurons[1] = new HiddenNeuron(numWeights, weights);
-    neurons[2] = new HiddenNeuron(numWeights, weights);
-
-    HiddenLayer* hL = new HiddenLayer(numNeurons, neurons, "relu");
-
-    delete hL;
-
-    for (int i = 0; i < numNeurons; i++) 
-        delete neurons[i];
-    delete [] neurons;
-    delete [] weights;
-
-    cout << "Success!" << endl;
-}
-
-void hiddenLayerSetNeurons()
-{
-    cout << "Testing Hidden Layer setNeurons" << endl;
-
-    int numWeights = 3;
-    double* weights = new double[numWeights];
-    weights[0] = 0.023;
-    weights[1] = 1.65;
-    weights[2] = 0.992;
-
-    int numNeurons = 3;
-    HiddenNeuron** neurons = new HiddenNeuron*[numNeurons];
-    neurons[0] = new HiddenNeuron(numWeights, weights);
-    neurons[1] = new HiddenNeuron(numWeights, weights);
-    neurons[2] = new HiddenNeuron(numWeights, weights);
-
-    HiddenLayer* hL = new HiddenLayer(numNeurons, neurons, "relu");
-
-    double* newWeights = new double[numWeights];
-    newWeights[0] = 2.3;
-    newWeights[1] = 16.5;
-    newWeights[2] = 9.92;
-
-    HiddenNeuron** newNeurons = new HiddenNeuron*[numNeurons];
-    newNeurons[0] = new HiddenNeuron(numWeights, newWeights);
-    newNeurons[1] = new HiddenNeuron(numWeights, newWeights);
-    newNeurons[2] = new HiddenNeuron(numWeights, newWeights);
-
-    hL->setNeurons(newNeurons);
-
-    delete hL;
-
-    for (int i = 0; i < numNeurons; i++) 
-        delete neurons[i];
-    delete [] neurons;
-    delete [] weights;
-    for (int i = 0; i < numNeurons; i++) 
-        delete newNeurons[i];
-    delete[] newNeurons;
-    delete[] newWeights;
-
-    cout << "Success!" << endl;
-}
-
-void hiddenLayerSetAndGetNeurons()
-{
-    cout << "Testing Hidden Layer setNeurons() & getNeurons()" << endl;
-
-    int numWeights = 3;
-    double* weights = new double[numWeights];
-    weights[0] = 0.023;
-    weights[1] = 1.65;
-    weights[2] = 0.992;
-
-    int numNeurons = 3;
-    HiddenNeuron** neurons = new HiddenNeuron*[numNeurons];
-    neurons[0] = new HiddenNeuron(numWeights, weights);
-    neurons[1] = new HiddenNeuron(numWeights, weights);
-    neurons[2] = new HiddenNeuron(numWeights, weights);
-
-    HiddenLayer* hL = new HiddenLayer(numNeurons, neurons, "relu");
-
-    double* newWeights = new double[numWeights];
-    newWeights[0] = 2.3;
-    newWeights[1] = 16.5;
-    newWeights[2] = 9.92;
-
-    HiddenNeuron** newNeurons = new HiddenNeuron*[numNeurons];
-    newNeurons[0] = new HiddenNeuron(numWeights, newWeights);
-    newNeurons[1] = new HiddenNeuron(numWeights, newWeights);
-    newNeurons[2] = new HiddenNeuron(numWeights, newWeights);
-
-    newNeurons[0]->setValue(1);
-    newNeurons[1]->setValue(2);
-    newNeurons[2]->setValue(3);
-
-    hL->setNeurons(newNeurons);
-
-    HiddenNeuron** resultNeurons = hL->getNeurons();
-    for (int i = 0; i < numNeurons; ++i)
-    {
-        cout << "neuron[" << i << "]: " << newNeurons[i]->getValue();
-    }
-
-    delete hL;
-
-    resultNeurons = nullptr;
-
-    for (int i = 0; i < numNeurons; i++) 
-        delete neurons[i];
-    delete [] neurons;
-    delete [] weights;
-    for (int i = 0; i < numNeurons; i++) 
-        delete newNeurons[i];
-    delete[] newNeurons;
-    delete[] newWeights;
-
-    cout << "Success!" << endl;
-}
-
-void hiddenLayerSetNumNeurons()
-{
-    cout << "Testing Hidden Layer setNumNeurons()" << endl;
-
-    int numWeights = 3;
-    double* weights = new double[numWeights];
-    weights[0] = 0.023;
-    weights[1] = 1.65;
-    weights[2] = 0.992;
-
-    int numNeurons = 3;
-    HiddenNeuron** neurons = new HiddenNeuron*[numNeurons];
-    neurons[0] = new HiddenNeuron(numWeights, weights);
-    neurons[1] = new HiddenNeuron(numWeights, weights);
-    neurons[2] = new HiddenNeuron(numWeights, weights);
-
-    HiddenLayer* hL = new HiddenLayer(numNeurons, neurons, "relu");
-
-    int newNumNeurons = 5;
-
-    hL->setNumNeurons(newNumNeurons);
-
-    delete hL;
-
-    for (int i = 0; i < numNeurons; i++) 
-        delete neurons[i];
-    delete [] neurons;
-    delete [] weights;
-    
-    cout << "Success!" << endl;
-}
-
-void hiddenLayerSetAndGetNumNeurons()
-{
-    cout << "Testing Hidden Layer setNumNeurons() & getNumNeurons()" << endl;
-
-    int numWeights = 3;
-    double* weights = new double[numWeights];
-    weights[0] = 0.023;
-    weights[1] = 1.65;
-    weights[2] = 0.992;
-
-    int numNeurons = 3;
-    HiddenNeuron** neurons = new HiddenNeuron*[numNeurons];
-    neurons[0] = new HiddenNeuron(numWeights, weights);
-    neurons[1] = new HiddenNeuron(numWeights, weights);
-    neurons[2] = new HiddenNeuron(numWeights, weights);
-
-    HiddenLayer* hL = new HiddenLayer(numNeurons, neurons, "relu");
-
-    int newNumNeurons = 5;
-
-    hL->setNumNeurons(newNumNeurons);
-    cout << "Number of Neurons: " << hL->getNumNeurons() << endl;
-
-    delete hL;
-
-    for (int i = 0; i < numNeurons; i++) 
-        delete neurons[i];
-    delete [] neurons;
-    delete [] weights;
-    
-    cout << "Success!" << endl;
-}
-
-void hiddenLayerForwardHiddenLayer()
-{
-    cout << "Testing Hidden Layer forward(HiddenLayer* prevLayer)" << endl;
-
-    int numWeights = 3;
-    double* weights = new double[numWeights];
-    weights[0] = 0.023;
-    weights[1] = 1.65;
-    weights[2] = 0.992;
-
-    int numNeurons = 3;
-    HiddenNeuron** neurons = new HiddenNeuron*[numNeurons];
-    neurons[0] = new HiddenNeuron(numWeights, weights);
-    neurons[1] = new HiddenNeuron(numWeights, weights);
-    neurons[2] = new HiddenNeuron(numWeights, weights);
-
-    HiddenLayer* hL = new HiddenLayer(numNeurons, neurons, "relu");
-
-    HiddenLayer* newHL = new HiddenLayer(numNeurons, neurons, "sigmoid");
-
-    hL->forward(newHL);
-
-    delete newHL;
-    delete hL;
-
-    for (int i = 0; i < numNeurons; i++) 
-        delete neurons[i];
-    delete [] neurons;
-    delete [] weights;
-    
-    cout << "Success!" << endl;
-}
-
-void hiddenLayerForwardInputLayer()
-{
-    cout << "Testing Hidden Layer forward(InputLayer* prevLayer)" << endl;
-
-    int numWeights = 3;
-    double* weights = new double[numWeights];
-    weights[0] = 0.023;
-    weights[1] = 1.65;
-    weights[2] = 0.992;
-
-    int numNeurons = 3;
-    HiddenNeuron** neurons = new HiddenNeuron*[numNeurons];
-    neurons[0] = new HiddenNeuron(numWeights, weights);
-    neurons[1] = new HiddenNeuron(numWeights, weights);
-    neurons[2] = new HiddenNeuron(numWeights, weights);
-
-    HiddenLayer* hL = new HiddenLayer(numNeurons, neurons, "relu");
-
-    InputLayer* iL = new InputLayer(numWeights);
-    iL->setInputs(weights);
-
-    hL->forward(iL);
-
-    delete hL;
-
-    for (int i = 0; i < numNeurons; i++) 
-        delete neurons[i];
-    delete [] neurons;
-    delete [] weights;
-    
-    cout << "Success!" << endl;
-}
-
-void hiddenLayerPrint()
-{
-    cout << "Testing Hidden Layer printLayer()" << endl;
-
-    int numWeights = 3;
-    double* weights = new double[numWeights];
-    weights[0] = 0.023;
-    weights[1] = 1.65;
-    weights[2] = 0.992;
-
-    int numNeurons = 3;
-    HiddenNeuron** neurons = new HiddenNeuron*[numNeurons];
-    neurons[0] = new HiddenNeuron(numWeights, weights);
-    neurons[1] = new HiddenNeuron(numWeights, weights);
-    neurons[2] = new HiddenNeuron(numWeights, weights);
-
-    HiddenLayer* hL = new HiddenLayer(numNeurons, neurons, "relu");
-
-    hL->printLayer();
-
-    delete hL;
-
-    for (int i = 0; i < numNeurons; i++) 
-        delete neurons[i];
-    delete [] neurons;
-    delete [] weights;
-    
-    cout << "Success!" << endl;
-}
-
-void hiddenLayerClear()
-{
-    cout << "Testing Hidden Layer clearLayer()" << endl;
-
-    int numWeights = 3;
-    double* weights = new double[numWeights];
-    weights[0] = 0.023;
-    weights[1] = 1.65;
-    weights[2] = 0.992;
-
-    int numNeurons = 3;
-    HiddenNeuron** neurons = new HiddenNeuron*[numNeurons];
-    neurons[0] = new HiddenNeuron(numWeights, weights);
-    neurons[1] = new HiddenNeuron(numWeights, weights);
-    neurons[2] = new HiddenNeuron(numWeights, weights);
-
-    HiddenLayer* hL = new HiddenLayer(numNeurons, neurons, "relu");
-
-    hL->clearLayer();
-
-    delete hL;
-
-    for (int i = 0; i < numNeurons; i++) 
-        delete neurons[i];
-    delete [] neurons;
-    delete [] weights;
-    
-    cout << "Success!" << endl;
-}
-
-//*********************************************************
-
-void outputLayerConstructor()
-{
-    cout << "Testing Output Layer constructor" << endl;
-    int numWeights = 3;
-    double* weights = new double[numWeights];
-
-    OutputLayer* oL = new OutputLayer(numWeights, weights);
-
-    delete [] weights;
-    cout << "Success!" << endl;
-}
-
-void outputLayerDestructor()
-{
-    cout << "Testing Output Layer destructor" << endl;
-
-    int numWeights = 3;
-    double* weights = new double[numWeights];
-
-    OutputLayer* oL = new OutputLayer(numWeights, weights);
-
-    delete oL;
-
-    delete [] weights;
-    cout << "Success!" << endl;
-}
-
-void outputLayerSetOutputValue()
-{
-    cout << "Testing Output Layer setOutputValue()" << endl;
-
-    int numWeights = 3;
-    double* weights = new double[numWeights];
-
-    OutputLayer* oL = new OutputLayer(numWeights, weights);
-
-    oL->setOutputValue(3.14);
-
-    delete oL;
-
-    delete [] weights;
-    cout << "Success!" << endl;
-}
-
-void outputLayerSetAndGetOutputValue()
-{
-    cout << "Testing Output Layer setOutputValue() & getOutputValue()" << endl;
-
-    int numWeights = 3;
-    double* weights = new double[numWeights];
-
-    OutputLayer* oL = new OutputLayer(numWeights, weights);
-
-    oL->setOutputValue(3.14);
-
-    cout << "Output: " << oL->getOutputValue() << endl;
-
-    delete oL;
-
-    delete [] weights;
-
-    cout << "Success!" << endl;
-}
-
-void outputLayerForwardLastHiddenLayer()
-{
-    cout << "Testing Output Layer forward(HiddenLayer* lastHiddenLayer)" << endl;
-
-    int numWeights = 3;
-    double* weights = new double[numWeights];
-    weights[0] = 0.023;
-    weights[1] = 1.65;
-    weights[2] = 0.992;
-
-    int numNeurons = 3;
-    HiddenNeuron** neurons = new HiddenNeuron*[numNeurons];
-    neurons[0] = new HiddenNeuron(numWeights, weights);
-    neurons[1] = new HiddenNeuron(numWeights, weights);
-    neurons[2] = new HiddenNeuron(numWeights, weights);
-
-    HiddenLayer* hL = new HiddenLayer(numNeurons, neurons, "sigmoid");
-
-    OutputLayer* oL = new OutputLayer(numWeights, weights);
-
-    oL->forward(hL);
-    cout << "output: " << oL->getOutputValue() << endl;
-
-    delete hL;
-    delete oL;
-    for (int i = 0; i < numNeurons; i++) 
-        delete neurons[i];
-    delete [] neurons;
-    delete [] weights;
-
-    cout << "Success!" << endl;
-}
-
-void outputLayerPrint()
-{
-    cout << "Testing Output Layer printLayer()" << endl;
-
-    int numWeights = 3;
-    double* weights = new double[numWeights];
-
-    OutputLayer* oL = new OutputLayer(numWeights, weights);
-
-    oL->printLayer();
-
-    delete oL;
-
-    delete [] weights;
-
-    cout << "Success!" << endl;
-}
-
-void outputLayerClear()
-{
-    cout << "Testing Output Layer clearLayer()" << endl;
-
-    int numWeights = 3;
-    double* weights = new double[numWeights];
-
-    OutputLayer* oL = new OutputLayer(numWeights, weights);
-
-    oL->clearLayer();
-
-    delete oL;
-
-    delete [] weights;
-
-    cout << "Success!" << endl;
-}
-
-//*********************************************************
-
-void neuralNetworkConstructor()
-{
-    cout << "Testing Neural Network Constructor" << endl;
-    
-    NeuralNetwork* network = new NeuralNetwork("mean.txt");
-
-    cout << "Success!" << endl;
-}
-
-void neuralNetworkDestructor()
-{
-    cout << "Testing Neural Network Destructor" << endl;
-    
-    NeuralNetwork* network = new NeuralNetwork("mean.txt");
-    delete network;
-
-    cout << "Success!" << endl;
-}
-
-void neuralNetworkForward()
-{
-    cout << "Testing Neural Network forward operation" << endl;
-    
-    NeuralNetwork* network = new NeuralNetwork("sin(x).txt");
-
-    double* inputs = new double[1];
-    inputs[0] = 0.0;
-    //inputs[1] = -2.0;
-    //inputs[2] = -32.0;
-    //inputs[3] = 60.0;
-    //inputs[4] = -10.0;
-
-    cout << "Output: " << network->forward(inputs) << endl;
-
-    delete network;
-
-    cout << "Success!" << endl;
-}
-
-void neuralNetworkPrint()
-{
-    cout << "Testing Neural Network printNetwork()" << endl;
-    
-    NeuralNetwork* network = new NeuralNetwork("mean.txt");
-
-    network->printNetwork();
-
-    delete network;
-
-    cout << "Success!" << endl;
-}
-
-void neuralNetworkClear()
-{
-    cout << "Testing Neural Network clearNetwork()" << endl;
-    
-    NeuralNetwork* network = new NeuralNetwork("mean.txt");
-
-    network->clearNetwork();
-
-    delete network;
-
-    cout << "Success!" << endl;
 }
