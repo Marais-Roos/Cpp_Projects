@@ -30,7 +30,7 @@ void OutputLayer::forward(HiddenLayer* lastHiddenLayer)
 {
     for (int i = 0; i < this->numWeights; i++)
     {
-        //this->outputValue += (this->weights[i]) * (lastHiddenLayer->getNeurons()[i]->getValue());
+        this->outputValue += (this->weights[i]) * (lastHiddenLayer->getNeurons()[i]->getValue());
     }
 }
 

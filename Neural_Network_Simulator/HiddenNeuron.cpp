@@ -46,10 +46,7 @@ void HiddenNeuron::forward(InputLayer* prevLayer)
 
 void HiddenNeuron::activateReLU()
 {
-    if (!(this->value > 0))
-    {
-        this->value = 0;
-    }
+    this->value = std::max(0.0, this->value);
 }
 
 void HiddenNeuron::activateSigmoid()

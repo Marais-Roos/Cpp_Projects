@@ -967,14 +967,14 @@ void neuralNetworkForward()
 {
     cout << "Testing Neural Network forward operation" << endl;
     
-    NeuralNetwork* network = new NeuralNetwork("mean.txt");
+    NeuralNetwork* network = new NeuralNetwork("sin(x).txt");
 
-    double* inputs = new double[5];
-    inputs[0] = 5.0;
-    inputs[1] = 10.0;
-    inputs[2] = 15.0;
-    inputs[3] = 20.0;
-    inputs[4] = 25.0;
+    double* inputs = new double[1];
+    inputs[0] = 0.0;
+    //inputs[1] = -2.0;
+    //inputs[2] = -32.0;
+    //inputs[3] = 60.0;
+    //inputs[4] = -10.0;
 
     cout << "Output: " << network->forward(inputs) << endl;
 

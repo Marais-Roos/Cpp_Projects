@@ -6,6 +6,7 @@
 class HiddenLayer;
 
 #include <math.h>
+#include <algorithm>
 
 class HiddenNeuron 
 {
