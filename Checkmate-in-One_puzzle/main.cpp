@@ -1,4 +1,5 @@
 #include "piece.h"
+#include "board.h"
 
 using namespace std;
 
@@ -16,6 +17,8 @@ void pieceSetY();
 void pieceOutputOverload();
 void pieceIndexOverload();
 void pieceAddOverload();
+
+
 
 int main()
 {

@@ -117,7 +117,7 @@ piece
 - ```xPos```: The X coordinate of the piece on the board.
 - ```yPos```: The Y coordinate of the piece on the board.
 
-### Member Functions
+#### Member Functions
 
 - ```piece```: The default and empty constructor for the piece class. It is blank.
 - ```piece(newPiece:piece*)```: This is a copy constructor for the piece class. It receives an instantiated piece object and copies the values of that object into a newly constructed instance.
@@ -150,3 +150,56 @@ where x represents an x coordinate and y represents a y coordinate. If the coord
 b rook at [0,0]
 ```
 The side is printed first, then the piece type followed by the coordinates at the end. This message must be sent to the output variable.
+
+### Board Class
+
+It is comprised of two files: **board.h** and **board.cpp**.
+A definition for the class is provided below:
+```
+board
+-numWhitePieces:int
+-numBlackPieces:int
+-whitePieces: piece **
+-blackPieces: piece **
+-chessboard: string **
+-move: string
+-sideToMove:char
+-operator++():board&
+------------------------
++board(pieceList:string)
++∼board()
++operator--():board&
++checkIfPieceHasCheck(pieceType:string ,xPos:int,yPos:int ,kingX:int,kingY:int):bool
+```
+
+#### Member Variables
+
+- ```numWhitePieces```:The number of white pieces left on the board.
+- ```numBlackPieces```:The number of black pieces left on the board.
+- ```whitePieces```: A dynamic array of piece objects representing all of the white piece objects.
+- ```blackPieces```: A dynamic array of piece objects representing all of the black piece objects.
+- ```chessboard```: A 2D string array representing the chessboard.
+- ```move```: The move being submitted as a solution to the given board puzzle.
+- ```sideToMove```: The side which is to make the move to solve the puzzle.
+
+#### Member Functions
+
+- ```board(pieceList:string)```: The constructor for the board class. It will receive the game board setup information in the form of a name to the file containing that information. It must read the setup file to extract the required information to instantiate the class variables with appropriate values as defined by the text file format.
+    When the constructor has finished executing, the chessboard 2D array should be populated as defined above with the corresponding pieces in their appropriate locations. Additionally, all of the pieces should have their appropriate objects instantiated in their respective arrays.
+- ```∼board()```: The destructor for the board object. When called all of the dynamic memory that has been assigned should be deleted. The order (from first ot be deleted to last) of the deletion order is as follows: blackPieces, whitePieces, chessboard. Once deleted, you should print a final message with a new line at the end. The message has the following format:
+
+    ````Num Pieces Removed: X````
+
+    X in this example refers to the total number of pieces (considering both sides) that were originally placed on the board at the start of the program.
+- ```operator++()```: This operator moves the piece located at the first set of coordinates to the board position denoted by the second set of coordinates. You can assume that the coordinates will always be correct for the piece and its movement types and that no move will expose a king to being checked. The change in position for said piece should also be reflected in the respective pieces object in the appropriate pieces array for the side that is moving. The coordinates for this move come from the move variable.
+- ```checkIfPieceHasCheck(pieceType:string ,xPos:int,yPos:int ,kingX:int,kingY:int)```: This function is used to check if a given piece has a check status on the opposing king. It receives the type of piece being checked for as well as its position (xPos and yPos) and the position of the king to compare against. If the piece has a check then a true is returned otherwise false is returned.
+    Note that pawns, queens, knights, bishops and rooks are the only pieces capable of checking a king.
+- ```operator−−```: This is the most important operator. It is used to determine if the solution, the move provided, actually solves the Checkmate-in-One puzzle. This operator should, based on the conditions described about the puzzle, determine if the side that made the move induced a checkmate scenario on the opposing player. Remember that the opposing player is only going to be able to move their king, and cannot block checks, or capture pieces that might cause checks. If a checkmate is reached the operator should output the following message with new line at the end:
+
+    ```Success: Checkmate of w King at [X,Y]```
+
+    where X,Y refers to the original coordinates of the opposing king and where they were first put into check. The side of the king that got checkmated should be before the word King. For reference, w refers to the white side and b refers to the black side.
+
+    If the move failed to produce a checkmate, either because it did not check the enemy king, or the enemy king was able to escape, then the message (with a new line at the end) should be:
+    
+    ```Failed: No Checkmate of w King```

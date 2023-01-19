@@ -4,16 +4,17 @@ CC = g++
 CFLAGS = -Wall -g
 
 #Targets needed to bring the executable up to date
-main: piece.o main.o #InputLayer.o  OutputLayer.o NeuralNetwork.o main.o
-	$(CC) $(CFLAGS) -o main piece.o  main.o
+main: main.o board.o  piece.o #NeuralNetwork.o main.o
+	$(CC) $(CFLAGS) -o main main.o piece.o board.o
 
-main.o: main.cpp piece.h #HiddenLayer.h HiddenNeuron.h OutputLayer.h NeuralNetwork.h
+main.o: main.cpp piece.h board.h #HiddenLayer.h HiddenNeuron.h OutputLayer.h NeuralNetwork.h
 	$(CC) $(CFLAGS) -c main.cpp
 
-piece.o: piece.h
+piece.o: piece.cpp piece.h
+	$(CC) $(CFLAGS) -c piece.cpp
 
-#HiddenNeuron.o: HiddenNeuron.cpp HiddenNeuron.h HiddenLayer.h InputLayer.h
-#	$(CC) $(CFLAGS) -c HiddenNeuron.cpp
+board.o: board.cpp board.h piece.h
+	$(CC) $(CFLAGS) -c board.cpp
 #
 #HiddenLayer.o: HiddenLayer.cpp HiddenLayer.h HiddenNeuron.h
 #	$(CC) $(CFLAGS) -c HiddenLayer.cpp
