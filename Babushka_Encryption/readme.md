@@ -42,7 +42,11 @@ Decryption simply needs to undo the encryption result of encryption. Each ```Bab
 
 ### Babushka
 
+An abstract base class which is the base class of all Babushkas.
+
 ```
+Babushka
+---
 # id: const unsigned char*
 # ID_LENGTH: static const int
 # MAX_VALUE_INCLUSIVE: static const unsigned char
@@ -51,10 +55,19 @@ Decryption simply needs to undo the encryption result of encryption. Each ```Bab
 + Babushka(const unsigned char* id)
 + ~Babushka()
 + getIdLength(): const int
-+ getId(): const unsigned char
++ getId(): const unsigned char*
 + decrypt(unsigned char* data, int size): void
 + encrypt(unsigned char* data, int size): void
 ```
+
+#### Member variables & functions
+- ```id``` an array of type ```unsigned char```. It contains alphanumeric characters. The constructor sets this member variables without creating any new memory.
+- ```ID_LENGTH``` is the length of the ```id``` array.
+- ```ID_LENGTH```, ```MAX_VALUE_INCLUSIVE```, ```MIN_VALUE_INCLUSIVE``` are static constants. They are initialized to 10, 126, and 32 respectively. This implies that all ```id```s will have a length of 10.
+- ```~Babushka()``` is a virtual destructor that is responsible for freeing the memory of ```id```.
+- ```getIdLength``` returns the ```ID_LENGTH``` member variable.
+- ```getId``` returns the ```id``` member variable.
+- ```encrypt``` and ```decrypt``` are pure virtual functions, they have no implementation in this class.
 
 ### BlueBabushka
 
