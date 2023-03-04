@@ -1,5 +1,7 @@
 # Checkmate-in-One Puzzle
 
+This project is not yet completed, I am currently working on completing it.
+
 This project showcases my familiarity with the use of classes, objects, constructors, destructors, dynamic memory and the use of operator overloading.
 
 ## Overview
