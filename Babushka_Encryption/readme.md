@@ -28,7 +28,7 @@ Moreover, each ```Babushka``` has its own ID, essentially acting as the key for 
 
 A ```Controller``` class contains an array of ```Babushka``` objects, and in order for encryption to occur, each ```Babushka``` object in the array is used one after the other to progressively encrypt a particular message. Decryption is the reverse of this process (i.e. given a cipher text as input, use the Babushkas to decrypt and obtain the original plain text)
 
-![visual-representation-of-babushka-encryption-scheme](Screenshot2023-03-04153008.png)
+![visual-representation-of-babushka-encryption-scheme](images/Screenshot2023-03-04153008.png)
 
 An array with a green, red and blue ```Babushka``` is defined. Each Babushka has its own ```id``` which is set to ```id1```, ```id2``` and ```id3``` for each respective ```Babushka``` (in the actual assignment you will be given these ids). Given the ```Babushka``` array and some plain text, each ```Babushka``` gets a chance to append and prepend its ```id``` to the input and then proceeds to use its particular type of encryption. Each ```Babushka``` is used from left to right in the array for encryption. The output of all previous ```Babushka```s is used as input to the current ```Babushka``` (this is why they are called nesting dolls). The output after the final ```Babushka``` has encrypted is the final cipher text.
 
@@ -38,7 +38,7 @@ Decryption simply needs to undo the encryption result of encryption. Each ```Bab
 
 ## UML Class Diagrams
 
-![babushka-classes-uml-diagrams](Babushkas_UML.png)
+![babushka-classes-uml-diagrams](images/Babushkas_UML.png)
 
 ### Babushka
 
