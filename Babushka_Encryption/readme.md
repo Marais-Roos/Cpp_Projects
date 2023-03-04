@@ -60,7 +60,7 @@ Babushka
 + encrypt(unsigned char* data, int size): void
 ```
 
-#### Member variables & functions
+#### Notes
 - ```id``` an array of type ```unsigned char```. It contains alphanumeric characters. The constructor sets this member variables without creating any new memory.
 - ```ID_LENGTH``` is the length of the ```id``` array.
 - ```ID_LENGTH```, ```MAX_VALUE_INCLUSIVE```, ```MIN_VALUE_INCLUSIVE``` are static constants. They are initialized to 10, 126, and 32 respectively. This implies that all ```id```s will have a length of 10.
@@ -71,6 +71,9 @@ Babushka
 
 ### BlueBabushka
 
+This is a subclass of ```Babushka```. However, it still has no implementation of the ```encrypt``` and ```decrypt``` functions since it has two child classes of its own.
+
+The encryption this class involves addition or subtraction of a fixed amount for each element of the ```id``` array. 
 ```
 # amount: unsigned int
 ---
@@ -78,6 +81,10 @@ Babushka
 + decrypt(unsigned char* data, int size): void
 + encrypt(unsigned char* data, int size): void
 ```
+
+#### Notes
+- Constructor accepts the ```Babushka``` ```id``` which must then be forwarded to the base class - ```Babushka``` constructor. This class receives an additional parameter, ```amount```, which is set to the ```amount``` member variable.
+- ```encrypt``` and ```decrypt``` are pure virtual functions which have no implementation in this class.
 
 ### DarkBlueBabushka
 
