@@ -35,3 +35,87 @@ An array with a green, red and blue ```Babushka``` is defined. Each Babushka has
 ### Decryption visualization
 
 Decryption simply needs to undo the encryption result of encryption. Each ```Babushka``` also has a ```decrypt``` function.
+
+## UML Class Diagrams
+
+![babushka-classes-uml-diagrams](Babushkas_UML.png)
+
+### Babushka
+
+```
+# id: const unsigned char*
+# ID_LENGTH: static const int
+# MAX_VALUE_INCLUSIVE: static const unsigned char
+# MIN_VALUE_INCLUSIVE: static const unsigned char
+---
++ Babushka(const unsigned char* id)
++ ~Babushka()
++ getIdLength(): const int
++ getId(): const unsigned char
++ decrypt(unsigned char* data, int size): void
++ encrypt(unsigned char* data, int size): void
+```
+
+### BlueBabushka
+
+```
+# amount: unsigned int
+---
++ BlueBabushka(const unsigned char* id, unsigned int amount)
++ decrypt(unsigned char* data, int size): void
++ encrypt(unsigned char* data, int size): void
+```
+
+### DarkBlueBabushka
+
+```
++ DarkBlueBabushka(const unsigned char* id, unsigned int amount)
++ decrypt(unsigned char* data, int size): void
++ encrypt(unsigned char* data, int size): void
+```
+
+### LightBlueBabushka
+
+```
++ LightBlueBabushka(const unsigned char* id, unsigned int amount)
++ decrypt(unsigned char* data, int size): void
++ encrypt(unsigned char* data, int size): void
+```
+
+### GoldBabushka
+
+```
+# xorValue: unsigned char
+---
++ GoldBabushka(const unsigned char* id, unsigned char xorValue)
++ decrypt(unsigned char* data, int size): void
++ encrypt(unsigned char* data, int size): void
+```
+
+### GreenBabushka
+
+```
+- displacement: unsigned int
+---
++ GreenBabushka(const unsigned char* id, unsigned int displacement)
++ decrypt(unsigned char* data, int size): void
++ encrypt(unsigned char* data, int size): void
+```
+
+### RedBabushka
+
+```
+- rotationAmount: unsigned int
+---
++ RedBabushka(const unsigned char* id, unsigned int rotationAmount)
++ decrypt(unsigned char* data, int size): void
++ encrypt(unsigned char* data, int size): void
+```
+
+### YellowBabushka
+
+```
++ YellowBabushka(const unsigned char* id)
++ decrypt(unsigned char* data, int size): void
++ encrypt(unsigned char* data, int size): void
+```
