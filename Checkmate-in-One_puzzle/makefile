@@ -16,14 +16,6 @@ piece.o: piece.cpp piece.h
 board.o: board.cpp board.h piece.h
 	$(CC) $(CFLAGS) -c board.cpp
 #
-#HiddenLayer.o: HiddenLayer.cpp HiddenLayer.h HiddenNeuron.h
-#	$(CC) $(CFLAGS) -c HiddenLayer.cpp
-#
-#OutputLayer.o: OutputLayer.cpp OutputLayer.h HiddenLayer.h
-#	$(CC) $(CFLAGS) -c OutputLayer.cpp
-#
-#NeuralNetwork.o: NeuralNetwork.cpp NeuralNetwork.h OutputLayer.h HiddenLayer.h InputLayer.h
-#	$(CC) $(CFLAGS) -c NeuralNetwork.cpp
 
 #Makefile commands
 run:
