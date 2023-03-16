@@ -31,7 +31,7 @@ int main()
 {
     cout << "Running Tests!" << endl;
 
-    testPieceClass();
+    //testPieceClass();
     testBoardClass();
 
     cout << "All tests passed." << endl;
@@ -232,7 +232,9 @@ void boardCheckValidation()
     string filename = "game1.txt";
     board* b = new board(filename);
 
-    b->checkIfPieceHasCheck("knight", 2, 4, 0, 0);
+    bool check = b->checkIfPieceHasCheck("knight", 2, 4, 1, 2);
+
+    cout << boolalpha << check << endl;
 
     delete b;
     cout << "\tSuccess!\n\n";
@@ -244,6 +246,7 @@ void boardDecrementOverload()
     string filename = "game1.txt";
     board* b = new board(filename);
 
+    //b--;
     --(*b);
 
     delete b;

@@ -53,12 +53,12 @@ std::string piece::getPieceType()
     return this->pieceType;
 }
 
-int piece::getX()
+unsigned piece::getX()
 {
     return this->xPos;
 }
 
-int piece::getY()
+unsigned piece::getY()
 {
     return this->yPos;
 }

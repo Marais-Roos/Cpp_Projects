@@ -146,13 +146,28 @@ board& board::operator++()
     std::stringstream ss(this->move);
     std::string str;
     unsigned initX, initY, destX, destY;
+    std::string coords = this->move.substr(4);
+
     unsigned count = 0;
+
     while(std::getline(ss, str, ','))
     {
-        if (count == 0) initX = stoi(str);
-        if (count == 1) initY = stoi(str);
-        if (count == 2) destX = stoi(str);
-        if (count == 3) destY = stoi(str);
+        switch(count)
+        { 
+            case 0: 
+                initX = stoi(str); 
+                break;
+            case 1: 
+                initY = stoi(str); 
+                break;
+            case 2: 
+                destX = stoi(str); 
+                break;
+            case 3: 
+                destY = stoi(str); 
+                break;  
+        }
+        count++;
     }
 
     std::string boardCode;
@@ -164,7 +179,6 @@ board& board::operator++()
         {
             if(this->blackPieces[i]->getX() == initX && this->blackPieces[i]->getY() == initY)
             {
-                std::string coords = (std::to_string(initX) + "," + std::to_string(initY));
                 //Use the overload operator+ from the piece class
                 *this->blackPieces[i] + coords;
                 boardCode = this->blackPieces[i]->getSide() + this->blackPieces[i]->getPieceType()[0];
@@ -177,7 +191,6 @@ board& board::operator++()
         {
             if(this->whitePieces[i]->getX() == initX && this->whitePieces[i]->getY() == initY)
             {
-                std::string coords = (std::to_string(initX) + "," + std::to_string(initY));
                 //Use the overload operator+ from the piece class
                 *this->whitePieces[i] + coords;
                 boardCode = this->whitePieces[i]->getSide() + this->whitePieces[i]->getPieceType()[0];
@@ -193,9 +206,9 @@ board& board::operator++()
 
 board& board::operator--()
 {
-    std::string opponent = (sideToMove == 'w') ? "b" : "w";
+    char opponent = (sideToMove == 'w') ? 'b' : 'w';
     unsigned kingX, kingY;
-    bool checkmate = false;
+    bool checkmate = true;
     bool check = false;
 
     //find the opposing king's position
@@ -212,21 +225,53 @@ board& board::operator--()
         }
     }
 
-    //check if the current move is a check to the opposing king
-    for (unsigned i = 0; i < 8; i++)
+    //perform move
+    ++(*this);
+
+    unsigned xPos = std::stoi(this->move.substr(4,1));
+    unsigned yPos = std::stoi(this->move.substr(6,1));
+    std::string type;
+
+    if (sideToMove == 'w')
     {
-        for (unsigned j = 0; j < 8; j++)
+        for (unsigned i = 0; i < this->numWhitePieces; i++)
         {
-            if(chessboard[i][j].at(0) == sideToMove)
+            if (this->whitePieces[i]->getX() == xPos && this->whitePieces[i]->getY() == yPos)
             {
-                if(checkIfPieceHasCheck(chessboard[i][j].substr(1), i, j, kingX, kingY))
-                {
-                    check = true;
-                    break;
-                }
+                type = this->whitePieces[i]->getPieceType();
+                break;
             }
         }
     }
+    else if (sideToMove == 'b')
+    {
+        for (unsigned i = 0; i < this->numBlackPieces; i++)
+        {
+            if (this->blackPieces[i]->getX() == xPos && this->blackPieces[i]->getY() == yPos)
+            {
+                type = this->blackPieces[i]->getPieceType();
+                break;
+            }
+        }
+    }
+
+    check = checkIfPieceHasCheck(type, xPos, yPos, kingX, kingY);
+
+    //check if the current move is a check to the opposing king
+    //for (unsigned i = 0; i < 8; i++)
+    //{
+    //    for (unsigned j = 0; j < 8; j++)
+    //    {
+    //        if(chessboard[i][j][0] == sideToMove)
+    //        {
+    //            if(checkIfPieceHasCheck(type, i, j, kingX, kingY))
+    //            {
+    //                check = true;
+    //                break;
+    //            }
+    //        }
+    //    }
+    //}
 
     //check if the opposing king as any possible move that would not be in check
     if (check)
@@ -234,12 +279,10 @@ board& board::operator--()
         for(int i = kingX - 1; i <= kingX + 1; i++)
         {
             if(i < 0 || i > 7) continue;
-
             for(int j = kingY-1; j <= kingY+1; j++)
             {
                 if(j < 0 || j > 7) continue;
-
-                if(!checkIfPieceHasCheck(chessboard[i][j].substr(2),i,j,kingX,kingY))
+                if(!checkIfPieceHasCheck(type,i,j,kingX,kingY))
                 {
                     checkmate = false;
                     break;
@@ -268,7 +311,7 @@ bool board::checkIfPieceHasCheck(std::string pieceType, int xPos, int yPos, int 
     }
 
     // Check if the piece can check the king
-    if (pieceType != "pawn" && pieceType != "queen" && pieceType != "knight" && pieceType != "bishop" && pieceType != "rook")
+    if (pieceType == "King")
     {
         return false;
     }
@@ -388,6 +431,9 @@ bool board::checkIfPieceHasCheck(std::string pieceType, int xPos, int yPos, int 
             break;            
         }
     }
+
+    //remove after debugging
+    std::cout << std::boolalpha << check << std::endl;
 
     return check;
 }

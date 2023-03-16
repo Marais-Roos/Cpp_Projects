@@ -9,14 +9,15 @@
 class board
 {
 private:
-    int numWhitePieces;
-    int numBlackPieces;
+    unsigned numWhitePieces;
+    unsigned numBlackPieces;
     piece** whitePieces;
     piece** blackPieces;
     std::string** chessboard;
     std::string move;
     char sideToMove;
     board& operator++();
+    
 public:
     board(std::string pieceList);
     ~board();

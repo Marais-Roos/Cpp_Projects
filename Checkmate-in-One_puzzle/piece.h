@@ -9,8 +9,8 @@ class piece
 private:
     std::string pieceType;
     char side;
-    int xPos;
-    int yPos;
+    unsigned xPos;
+    unsigned yPos;
 public:
     piece();
     piece(piece* newPiece);
@@ -18,8 +18,8 @@ public:
     ~piece();
     char getSide();
     std::string getPieceType();
-    int getX();
-    int getY();
+    unsigned getX();
+    unsigned getY();
     void setX(int x);
     void setY(int y);
     friend std::ostream& operator<<(std::ostream& output, const piece& t);
