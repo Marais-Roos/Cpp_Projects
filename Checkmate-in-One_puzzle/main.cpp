@@ -244,7 +244,7 @@ void boardDecrementOverload()
     string filename = "game1.txt";
     board* b = new board(filename);
 
-    b--;
+    --(*b);
 
     delete b;
     cout << "\tSuccess!\n\n";
