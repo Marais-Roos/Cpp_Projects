@@ -1,0 +1,4 @@
+game1.txt, 0
+game2.txt, 4
+game3.txt, 1
+game4.txt, 2

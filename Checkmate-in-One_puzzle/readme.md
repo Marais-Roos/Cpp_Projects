@@ -1,6 +1,7 @@
 # Checkmate-in-One Puzzle
 
-This project is not yet completed, I am currently working on completing it.
+## Current issues to address:
+- The ```board::operator--()``` overload always returns the incorrect input, even though the piece is in check. I am working on a fix for this.
 
 This project showcases my familiarity with the use of classes, objects, constructors, destructors, dynamic memory and the use of operator overloading.
 
@@ -205,3 +206,37 @@ board
     If the move failed to produce a checkmate, either because it did not check the enemy king, or the enemy king was able to escape, then the message (with a new line at the end) should be:
     
     ```Failed: No Checkmate of w King```
+
+### Solver class
+
+It is comprised of two files: **solver.h** and **solver.cpp**. This class is where the bulk of the processing and complexity of the assignment will be found as implementing it, implements the game logic. You will be required to produce both of these files for yourself. A UML diagram for the class is provided below:
+
+```
+solver
+-numGames:int
+-boards: board **
+------------------------
++solver(games:string)
++∼ solver()
+```
+
+#### Member Variables
+- numGames: This is the number of boards that are going to be created.
+- boards: This is a dynamic array that will store a number of board objects. Each represents a board and potential solution that will have to be evaluated.
+
+#### Member functions
+
+- solver(games:string): The class constructor. It will receive the name of the list file which contains the list of all of the boards to be loaded into the boards array, as well as their solving priority. This function should instantiate the boards array based on the appropriate information and then determine the checkmate status of every board. The output for this has the following format:
+
+[X] Y
+
+X refers to the solving priority associated with a given board and Y refers to the output produced by the determineIfCheckMate function. You should make use of the appropriate board function to output this information. Finally, the boards must be processed in ascending order of solving priority. The order in which they were read into the array should remain unchanged. For example, if there are 3 boards to
+solve, the output would look something like this:
+```
+[0] Success: Checkmate of w King at [1,0]
+[4] Failure: No Checkmate of b King
+[8] Failure: No Checkmate of w King
+```
+- ~solver(): The class destructor. This deallocates any allocated memory of the class. It will delete the boards from index 0 to index X where X refers to the last board index that is stored in the array. After this, print out the following message with a new line at the end:
+```Num Boards Deleted: B```
+where B refers to the number of boards that were deleted.

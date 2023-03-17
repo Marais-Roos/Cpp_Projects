@@ -208,7 +208,7 @@ board& board::operator--()
 {
     char opponent = (sideToMove == 'w') ? 'b' : 'w';
     unsigned kingX, kingY;
-    bool checkmate = true;
+    bool checkmate = false;
     bool check = false;
 
     //find the opposing king's position
@@ -256,41 +256,44 @@ board& board::operator--()
     }
 
     check = checkIfPieceHasCheck(type, xPos, yPos, kingX, kingY);
-
-    //check if the current move is a check to the opposing king
-    //for (unsigned i = 0; i < 8; i++)
-    //{
-    //    for (unsigned j = 0; j < 8; j++)
-    //    {
-    //        if(chessboard[i][j][0] == sideToMove)
-    //        {
-    //            if(checkIfPieceHasCheck(type, i, j, kingX, kingY))
-    //            {
-    //                check = true;
-    //                break;
-    //            }
-    //        }
-    //    }
-    //}
+    std::cout << "Check: " << std::boolalpha << check << std::endl;
 
     //check if the opposing king as any possible move that would not be in check
     if (check)
     {
         for(int i = kingX - 1; i <= kingX + 1; i++)
         {
-            if(i < 0 || i > 7) continue;
+            //if(i < 0 || i > 7) continue;
             for(int j = kingY-1; j <= kingY+1; j++)
             {
-                if(j < 0 || j > 7) continue;
-                if(!checkIfPieceHasCheck(type,i,j,kingX,kingY))
+                //if(j < 0 || j > 7) continue;
+
+                if (sideToMove == 'w')
                 {
-                    checkmate = false;
-                    break;
+                    for (unsigned k = 0; k < this->numWhitePieces; k++)
+                    {
+                        if (checkIfPieceHasCheck(this->whitePieces[k]->getPieceType(), this->whitePieces[k]->getX(), this->whitePieces[k]->getY(), i, j))
+                        {
+                            checkmate = true;
+                            break;
+                        }
+                    }
+                }
+                else if (sideToMove == 'b')
+                {
+                    for (unsigned k = 0; k < this->numBlackPieces; k++)
+                    {
+                        if (checkIfPieceHasCheck(this->blackPieces[k]->getPieceType(), this->blackPieces[k]->getX(), this->blackPieces[k]->getY(), i, j))
+                        {
+                            checkmate = true;
+                            break;
+                        }
+                    }
                 }
             }
         }
     }
-
+    std::cout << "Checkmate: " << std::boolalpha << checkmate << std::endl;
     //output the result
     if(checkmate)
     {
@@ -432,8 +435,8 @@ bool board::checkIfPieceHasCheck(std::string pieceType, int xPos, int yPos, int 
         }
     }
 
-    //remove after debugging
-    std::cout << std::boolalpha << check << std::endl;
+
+    //std::cout << std::boolalpha << check << std::endl;
 
     return check;
 }

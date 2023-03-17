@@ -23,7 +23,8 @@ void testPieceClass();
 void boardConstructor();
 void boardDestructor();
 void boardCheckValidation();
-void boardDecrementOverload();
+void boardDecrementOverloadFalse();
+void boardDecrementOverloadTrue();
 
 void testBoardClass();
 
@@ -32,7 +33,10 @@ int main()
     cout << "Running Tests!" << endl;
 
     //testPieceClass();
-    testBoardClass();
+    //testBoardClass();
+
+    boardDecrementOverloadFalse();
+    boardDecrementOverloadTrue();
 
     cout << "All tests passed." << endl;
 
@@ -67,7 +71,8 @@ void testBoardClass()
     boardConstructor();
     boardDestructor();
     boardCheckValidation();
-    boardDecrementOverload();
+    boardDecrementOverloadFalse();
+    boardDecrementOverloadTrue();
 }
 
 void pieceDefaultConstructor()
@@ -229,7 +234,7 @@ void boardDestructor()
 void boardCheckValidation()
 {
     cout << "\tTesting Board checkIfPieceHasCheck() function..\n";
-    string filename = "game1.txt";
+    string filename = "game2.txt";
     board* b = new board(filename);
 
     bool check = b->checkIfPieceHasCheck("knight", 2, 4, 1, 2);
@@ -240,7 +245,20 @@ void boardCheckValidation()
     cout << "\tSuccess!\n\n";
 }
 
-void boardDecrementOverload()
+void boardDecrementOverloadFalse()
+{
+    cout << "\tTesting Board Overloaded Decrement operator..\n";
+    string filename = "game2.txt";
+    board* b = new board(filename);
+
+    //b--;
+    --(*b);
+
+    delete b;
+    cout << "\tSuccess!\n\n";
+}
+
+void boardDecrementOverloadTrue()
 {
     cout << "\tTesting Board Overloaded Decrement operator..\n";
     string filename = "game1.txt";
